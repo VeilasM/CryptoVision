@@ -29,7 +29,7 @@
         }
         .tab-buttons {
             display: flex;
-            justify-content: space-around; /* Изменено на space-around для равномерного распределения */
+            justify-content: space-around;
             margin-bottom: 1.5rem;
             background-color: #4A5568; /* Фон для кнопок вкладок */
             border-radius: 0.75rem;
@@ -91,7 +91,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .analysis-card, .subscription-card, .payment-card { /* tools-card удален */
+        .analysis-card, .subscription-card, .payment-card {
             background-color: #2C3440; /* Темнее фон для карточек */
             border-radius: 0.75rem;
             padding: 1rem;
@@ -122,8 +122,6 @@
             display: none; /* Скрыто по умолчанию */
             border: 1px solid #4A5568;
         }
-        /* .tools-area { /* Этот класс был удален, так как вкладка "Инструменты" убрана */
-        /* } */
         .subscription-plan {
             background-color: #374151; /* Темнее фон для планов подписки */
             border: 1px solid #4A5568;
@@ -219,13 +217,13 @@
                     <h3>Премиум план</h3>
                     <p>Полный доступ к AI-анализу, расширенным инструментам и эксклюзивным сигналам.</p>
                     <p class="font-bold text-lg mt-2">9.99 Stars/месяц</p>
-                    <button class="btn-primary w-full mt-3">Подписаться</button>
+                    <button class="btn-primary w-full mt-3" onclick="requestSubscriptionPayment(999)">Подписаться</button>
                 </div>
                 <div class="subscription-plan">
                     <h3>VIP план</h3>
                     <p>Все возможности Премиум плана плюс персональные консультации и ранний доступ к новым функциям.</p>
                     <p class="font-bold text-lg mt-2">29.99 Stars/месяц</p>
-                    <button class="btn-primary w-full mt-3">Подписаться</button>
+                    <button class="btn-primary w-full mt-3" onclick="requestSubscriptionPayment(2999)">Подписаться</button>
                 </div>
             </div>
         </div>
@@ -237,8 +235,8 @@
                 <div class="payment-info">
                     <img src="https://placehold.co/80x80/0088CC/FFFFFF?text=%E2%AD%90" alt="Telegram Stars Icon" class="mx-auto mb-4">
                     <p class="mb-4">Для пополнения баланса и активации подписок мы используем Telegram Stars.</p>
-                    <p class="mb-4">Ваш текущий баланс: <span class="font-bold text-blue-600">0 Stars</span></p>
-                    <button id="addStarsBtn" class="btn-primary w-full">Пополнить через Telegram Stars</button>
+                    <p class="mb-4">Ваш текущий баланс: <span class="font-bold text-blue-600" id="userStarsBalance">0 Stars</span></p>
+                    <button id="addStarsBtn" class="btn-primary w-full">Пополнить через Telegram Stars (100 Stars)</button>
                     <p class="text-sm text-gray-400 mt-4">Нажмите кнопку выше, чтобы открыть интерфейс покупки Telegram Stars.</p>
                 </div>
             </div>
@@ -246,6 +244,7 @@
 
     </div>
 
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         // Получаем ссылки на элементы DOM
         const chartImageUpload = document.getElementById('chartImageUpload');
@@ -271,10 +270,47 @@
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
-        // Кнопка пополнения Stars
+        // Кнопки пополнения Stars и баланс
         const addStarsBtn = document.getElementById('addStarsBtn');
+        const userStarsBalance = document.getElementById('userStarsBalance');
 
         let uploadedImageBase64 = null; // Для хранения base64 изображения
+
+        // Инициализация Telegram Web App
+        // Убедитесь, что Telegram.WebApp готов к использованию
+        if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
+            Telegram.WebApp.ready();
+            // Пример получения данных пользователя (если доступны)
+            // console.log('User data:', Telegram.WebApp.initDataUnsafe.user);
+            // console.log('Theme params:', Telegram.WebApp.themeParams);
+            // Telegram.WebApp.expand(); // Разворачиваем мини-приложение на весь экран
+        } else {
+            console.warn('Telegram Web App API not available. Running in standalone mode.');
+            // Для тестирования вне Telegram, можно добавить заглушки для Telegram.WebApp
+            window.Telegram = {
+                WebApp: {
+                    ready: () => console.log('Telegram.WebApp.ready() called (mock)'),
+                    openInvoice: (url, callback) => {
+                        alert(`Демо: Открытие счета по URL: ${url}\nВ реальном приложении откроется платежный интерфейс.`);
+                        if (callback) callback('closed'); // Имитация закрытия
+                    },
+                    requestPayment: (payload, callback) => {
+                        alert(`Демо: Запрос платежа Stars с payload: ${JSON.stringify(payload)}\nВ реальном приложении откроется платежный интерфейс.`);
+                        if (callback) callback({ status: 'failed' }); // Имитация неудачи
+                    },
+                    initDataUnsafe: {
+                        user: {
+                            id: 12345,
+                            first_name: 'Демо',
+                            last_name: 'Пользователь'
+                        }
+                    },
+                    themeParams: {},
+                    expand: () => console.log('Telegram.WebApp.expand() called (mock)')
+                }
+            };
+        }
+
 
         // Обработчик клика по области загрузки изображения
         imageUploadArea.addEventListener('click', () => {
@@ -417,13 +453,62 @@
             }
         });
 
+        // Функция для запроса платежа Stars за подписку
+        function requestSubscriptionPayment(starsAmount) {
+            // В реальном приложении здесь будет логика для создания инвойса на сервере бота
+            // и получения invoice_url или invoice_payload
+            const invoicePayload = `subscription_plan_${starsAmount}`; // Пример payload
+
+            if (Telegram.WebApp && Telegram.WebApp.requestPayment) {
+                Telegram.WebApp.requestPayment({
+                    amount: starsAmount, // Сумма в Stars (целые числа)
+                    asset: 'stars', // Всегда 'stars' для Telegram Stars
+                    payload: invoicePayload // Уникальный идентификатор для вашей транзакции
+                }, (status) => {
+                    if (status.status === 'succeeded') {
+                        alert(`Подписка на ${starsAmount / 100} Stars успешно оплачена!`);
+                        // Здесь можно обновить баланс пользователя или активировать подписку
+                        updateStarsBalance(starsAmount); // Демо-обновление баланса
+                    } else {
+                        alert(`Ошибка оплаты или отмена: ${status.status}`);
+                    }
+                });
+            } else {
+                alert(`Демо: Запрос платежа на ${starsAmount / 100} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
+            }
+        }
+
         // Обработчик для кнопки "Пополнить через Telegram Stars"
         addStarsBtn.addEventListener('click', () => {
-            // Это демонстрация. В реальном приложении здесь будет вызов Telegram Mini Apps API
-            // Например: Telegram.WebApp.openInvoice('https://t.me/...');
-            // Или Telegram.WebApp.requestPayment('invoice_payload');
-            alert('Это демонстрация. В реальном приложении здесь откроется интерфейс покупки Telegram Stars.');
+            // В реальном приложении здесь будет логика для создания инвойса на сервере бота
+            // и получения invoice_url или invoice_payload
+            const starsToBuy = 100; // Пример: пользователь хочет купить 100 Stars
+            const invoicePayload = `top_up_${starsToBuy}`; // Уникальный payload для пополнения
+
+            if (Telegram.WebApp && Telegram.WebApp.requestPayment) {
+                Telegram.WebApp.requestPayment({
+                    amount: starsToBuy,
+                    asset: 'stars',
+                    payload: invoicePayload
+                }, (status) => {
+                    if (status.status === 'succeeded') {
+                        alert(`Вы успешно пополнили баланс на ${starsToBuy} Stars!`);
+                        updateStarsBalance(starsToBuy); // Демо-обновление баланса
+                    } else {
+                        alert(`Ошибка пополнения или отмена: ${status.status}`);
+                    }
+                });
+            } else {
+                alert(`Демо: Запрос пополнения на ${starsToBuy} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
+            }
         });
+
+        // Демо-функция для обновления баланса Stars
+        function updateStarsBalance(amount) {
+            let currentBalance = parseFloat(userStarsBalance.textContent.replace(' Stars', ''));
+            currentBalance += amount / 100; // Делим на 100, так как в UI отображаем 9.99, а в API целые числа
+            userStarsBalance.textContent = `${currentBalance.toFixed(2)} Stars`;
+        }
 
         // Функция для показа/скрытия спиннера загрузки
         function showLoading(isLoading) {
