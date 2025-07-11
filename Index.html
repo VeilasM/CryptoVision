@@ -91,7 +91,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .analysis-card, .tools-card, .subscription-card, .payment-card {
+        .analysis-card, .subscription-card, .payment-card { /* tools-card удален */
             background-color: #2C3440; /* Темнее фон для карточек */
             border-radius: 0.75rem;
             padding: 1rem;
@@ -122,19 +122,8 @@
             display: none; /* Скрыто по умолчанию */
             border: 1px solid #4A5568;
         }
-        .tools-area { /* Этот класс больше не используется, но оставлен на случай, если вернется */
-            background-color: #374151; /* Темнее фон для области инструментов */
-            border-radius: 0.5rem;
-            padding: 2rem;
-            text-align: center;
-            font-size: 1.2rem;
-            color: #CBD5E1;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
+        /* .tools-area { /* Этот класс был удален, так как вкладка "Инструменты" убрана */
+        /* } */
         .subscription-plan {
             background-color: #374151; /* Темнее фон для планов подписки */
             border: 1px solid #4A5568;
