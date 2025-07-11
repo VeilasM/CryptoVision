@@ -251,7 +251,7 @@
         const imageUploadArea = document.getElementById('imageUploadArea');
         const imagePreview = document.getElementById('imagePreview');
         const getAnalysisBtn = document.getElementById('getAnalysisBtn');
-        const buttonText = document.getElementById('buttonText');
+        const buttonText = document = document.getElementById('buttonText');
         const loadingSpinner = document.getElementById('loadingSpinner');
         const analysisResult = document.getElementById('analysisResult');
         const errorMessage = document.getElementById('errorMessage');
@@ -285,30 +285,7 @@
             // console.log('Theme params:', Telegram.WebApp.themeParams);
             // Telegram.WebApp.expand(); // Разворачиваем мини-приложение на весь экран
         } else {
-            console.warn('Telegram Web App API not available. Running in standalone mode.');
-            // Для тестирования вне Telegram, можно добавить заглушки для Telegram.WebApp
-            window.Telegram = {
-                WebApp: {
-                    ready: () => console.log('Telegram.WebApp.ready() called (mock)'),
-                    openInvoice: (url, callback) => {
-                        alert(`Демо: Открытие счета по URL: ${url}\nВ реальном приложении откроется платежный интерфейс.`);
-                        if (callback) callback('closed'); // Имитация закрытия
-                    },
-                    requestPayment: (payload, callback) => {
-                        alert(`Демо: Запрос платежа Stars с payload: ${JSON.stringify(payload)}\nВ реальном приложении откроется платежный интерфейс.`);
-                        if (callback) callback({ status: 'failed' }); // Имитация неудачи
-                    },
-                    initDataUnsafe: {
-                        user: {
-                            id: 12345,
-                            first_name: 'Демо',
-                            last_name: 'Пользователь'
-                        }
-                    },
-                    themeParams: {},
-                    expand: () => console.log('Telegram.WebApp.expand() called (mock)')
-                }
-            };
+            console.warn('Telegram Web App API not available. Running in standalone mode. Real payments will not work.');
         }
 
 
@@ -466,15 +443,18 @@
                     payload: invoicePayload // Уникальный идентификатор для вашей транзакции
                 }, (status) => {
                     if (status.status === 'succeeded') {
-                        alert(`Подписка на ${starsAmount / 100} Stars успешно оплачена!`);
+                        // alert(`Подписка на ${starsAmount / 100} Stars успешно оплачена!`);
                         // Здесь можно обновить баланс пользователя или активировать подписку
                         updateStarsBalance(starsAmount); // Демо-обновление баланса
+                        Telegram.WebApp.showAlert(`Подписка на ${starsAmount / 100} Stars успешно оплачена!`);
                     } else {
-                        alert(`Ошибка оплаты или отмена: ${status.status}`);
+                        // alert(`Ошибка оплаты или отмена: ${status.status}`);
+                        Telegram.WebApp.showAlert(`Ошибка оплаты или отмена: ${status.status}`);
                     }
                 });
             } else {
-                alert(`Демо: Запрос платежа на ${starsAmount / 100} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
+                console.warn(`Telegram Web App API not available. Cannot request payment for ${starsAmount / 100} Stars.`);
+                // alert(`Демо: Запрос платежа на ${starsAmount / 100} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
             }
         }
 
@@ -492,14 +472,17 @@
                     payload: invoicePayload
                 }, (status) => {
                     if (status.status === 'succeeded') {
-                        alert(`Вы успешно пополнили баланс на ${starsToBuy} Stars!`);
+                        // alert(`Вы успешно пополнили баланс на ${starsToBuy} Stars!`);
                         updateStarsBalance(starsToBuy); // Демо-обновление баланса
+                        Telegram.WebApp.showAlert(`Вы успешно пополнили баланс на ${starsToBuy} Stars!`);
                     } else {
-                        alert(`Ошибка пополнения или отмена: ${status.status}`);
+                        // alert(`Ошибка пополнения или отмена: ${status.status}`);
+                        Telegram.WebApp.showAlert(`Ошибка пополнения или отмена: ${status.status}`);
                     }
                 });
             } else {
-                alert(`Демо: Запрос пополнения на ${starsToBuy} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
+                console.warn(`Telegram Web App API not available. Cannot request payment for ${starsToBuy} Stars.`);
+                // alert(`Демо: Запрос пополнения на ${starsToBuy} Stars.\nВ реальном приложении откроется платежный интерфейс Telegram Stars.`);
             }
         });
 
