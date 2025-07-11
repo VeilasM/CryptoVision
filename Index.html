@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoVision - AI bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Общие стили для темной темы, вдохновленные TradingView */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1A202C; /* Темный сине-серый фон */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Выравнивание по верху */
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+            color: #E2E8F0; /* Светлый текст */
+        }
+        .container {
+            background-color: #2D3748; /* Чуть светлее темный фон для контейнера */
+            border-radius: 1rem; /* Скругленные углы */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 500px; /* Максимальная ширина для лучшей читаемости */
+            box-sizing: border-box;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: space-around; /* Изменено на space-around для равномерного распределения */
+            margin-bottom: 1.5rem;
+            background-color: #4A5568; /* Фон для кнопок вкладок */
+            border-radius: 0.75rem;
+            padding: 0.25rem;
+        }
+        .tab-button {
+            flex-grow: 1;
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.6rem;
+            font-weight: 600;
+            color: #CBD5E1; /* Светлый текст для неактивных кнопок */
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .tab-button.active {
+            background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .tab-button:hover:not(.active) {
+            background-color: #64748B; /* Темнее при наведении */
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .btn-primary {
+            background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem; /* Более скругленные */
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+        }
+        .loading-spinner {
+            border: 4px solid #4A5568; /* Цвет спиннера под темную тему */
+            border-top: 4px solid #63B3ED; /* Акцентный цвет спиннера */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .analysis-card, .tools-card, .subscription-card, .payment-card {
+            background-color: #2C3440; /* Темнее фон для карточек */
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border: 1px solid #4A5568; /* Темная рамка */
+        }
+        .analysis-item span:first-child {
+            font-weight: 600;
+            color: #90CDF4; /* Светло-голубой для заголовков */
+        }
+        .image-upload-area {
+            border: 2px dashed #4A5568;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+        }
+        .image-upload-area:hover {
+            border-color: #63B3ED;
+            background-color: #374151;
+        }
+        .image-preview {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            display: none; /* Скрыто по умолчанию */
+            border: 1px solid #4A5568;
+        }
+        .tools-area { /* Этот класс больше не используется, но оставлен на случай, если вернется */
+            background-color: #374151; /* Темнее фон для области инструментов */
+            border-radius: 0.5rem;
+            padding: 2rem;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #CBD5E1;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        .subscription-plan {
+            background-color: #374151; /* Темнее фон для планов подписки */
+            border: 1px solid #4A5568;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .subscription-plan h3 {
+            font-weight: 700;
+            color: #E2E8F0;
+            margin-bottom: 0.5rem;
+        }
+        .subscription-plan p {
+            color: #CBD5E1;
+            font-size: 0.9rem;
+        }
+        .payment-info {
+            text-align: center;
+            padding: 1rem;
+            color: #CBD5E1;
+        }
+        .payment-info img {
+            max-width: 80px;
+            margin: 0 auto 1rem;
+        }
+        .text-green-600 { color: #68D391; } /* Зеленый для темной темы */
+        .text-red-600 { color: #FC8181; } /* Красный для темной темы */
+        .text-blue-600 { color: #63B3ED; } /* Голубой для темной темы */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-2xl font-bold text-center mb-6">CryptoVision - AI bot</h1>
+
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="analysis">Анализ</button>
+            <button class="tab-button" data-tab="subscription">Подписка</button>
+            <button class="tab-button" data-tab="payment">Оплата</button>
+        </div>
+
+        <!-- Tab Content: Analysis -->
+        <div id="analysis" class="tab-content active">
+            <div class="mb-4">
+                <label for="chartImageUpload" class="block text-sm font-medium mb-2">Загрузите изображение графика:</label>
+                <div class="image-upload-area" id="imageUploadArea">
+                    <input type="file" id="chartImageUpload" accept="image/*" class="hidden">
+                    <p class="text-gray-400">Нажмите или перетащите файл сюда</p>
+                    <img id="imagePreview" class="image-preview mx-auto" src="#" alt="Предварительный просмотр графика">
+                </div>
+            </div>
+
+            <button id="getAnalysisBtn" class="btn-primary w-full flex items-center justify-center">
+                <span id="buttonText">Получить анализ</span>
+                <div id="loadingSpinner" class="loading-spinner hidden ml-3"></div>
+            </button>
+
+            <div id="analysisResult" class="analysis-card hidden">
+                <h2 class="text-xl font-semibold mb-4">Результаты анализа:</h2>
+                <div class="space-y-2 text-gray-300">
+                    <p class="analysis-item"><span class="text-blue-600">Действие:</span> <span id="outputAction" class="font-bold"></span></p>
+                    <p class="analysis-item"><span class="text-blue-600">Цена входа:</span> <span id="outputEntryPrice"></span></p>
+                    <p class="analysis-item"><span class="text-blue-600">Целевая цена:</span> <span id="outputTargetPrice"></span></p>
+                    <p class="analysis-item"><span class="text-blue-600">Стоп-лосс:</span> <span id="outputStopLoss"></span></p>
+                    <p class="analysis-item"><span class="text-blue-600">Тейк-профит:</span> <span id="outputTakeProfit"></span></p>
+                    <div class="analysis-item">
+                        <span class="text-blue-600">Технический анализ:</span>
+                        <p id="outputTechnicalAnalysis" class="mt-1 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="text-blue-600">Новостной анализ:</span>
+                        <p id="outputNewsAnalysis" class="mt-1 text-sm leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="hidden bg-red-800 border border-red-600 text-red-200 px-4 py-3 rounded-md mt-4" role="alert">
+                <strong class="font-bold">Ошибка!</strong>
+                <span class="block sm:inline" id="errorText"></span>
+            </div>
+        </div>
+
+        <!-- Tab Content: Subscription -->
+        <div id="subscription" class="tab-content">
+            <div class="subscription-card">
+                <h2 class="text-xl font-semibold text-center mb-4">Наши Подписки</h2>
+                <div class="subscription-plan">
+                    <h3>Базовый план</h3>
+                    <p>Доступ к базовому анализу.</p>
+                    <p class="font-bold text-lg mt-2">Бесплатно</p>
+                </div>
+                <div class="subscription-plan">
+                    <h3>Премиум план</h3>
+                    <p>Полный доступ к AI-анализу, расширенным инструментам и эксклюзивным сигналам.</p>
+                    <p class="font-bold text-lg mt-2">9.99 Stars/месяц</p>
+                    <button class="btn-primary w-full mt-3">Подписаться</button>
+                </div>
+                <div class="subscription-plan">
+                    <h3>VIP план</h3>
+                    <p>Все возможности Премиум плана плюс персональные консультации и ранний доступ к новым функциям.</p>
+                    <p class="font-bold text-lg mt-2">29.99 Stars/месяц</p>
+                    <button class="btn-primary w-full mt-3">Подписаться</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Payment -->
+        <div id="payment" class="tab-content">
+            <div class="payment-card">
+                <h2 class="text-xl font-semibold text-center mb-4">Пополнение Баланса</h2>
+                <div class="payment-info">
+                    <img src="https://placehold.co/80x80/0088CC/FFFFFF?text=%E2%AD%90" alt="Telegram Stars Icon" class="mx-auto mb-4">
+                    <p class="mb-4">Для пополнения баланса и активации подписок мы используем Telegram Stars.</p>
+                    <p class="mb-4">Ваш текущий баланс: <span class="font-bold text-blue-600">0 Stars</span></p>
+                    <button id="addStarsBtn" class="btn-primary w-full">Пополнить через Telegram Stars</button>
+                    <p class="text-sm text-gray-400 mt-4">Нажмите кнопку выше, чтобы открыть интерфейс покупки Telegram Stars.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Получаем ссылки на элементы DOM
+        const chartImageUpload = document.getElementById('chartImageUpload');
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const imagePreview = document.getElementById('imagePreview');
+        const getAnalysisBtn = document.getElementById('getAnalysisBtn');
+        const buttonText = document.getElementById('buttonText');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const analysisResult = document.getElementById('analysisResult');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        // Элементы вывода анализа
+        const outputAction = document.getElementById('outputAction');
+        const outputEntryPrice = document.getElementById('outputEntryPrice');
+        const outputTargetPrice = document.getElementById('outputTargetPrice');
+        const outputStopLoss = document.getElementById('outputStopLoss');
+        const outputTakeProfit = document.getElementById('outputTakeProfit');
+        const outputTechnicalAnalysis = document.getElementById('outputTechnicalAnalysis');
+        const outputNewsAnalysis = document.getElementById('outputNewsAnalysis');
+
+        // Элементы вкладок
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Кнопка пополнения Stars
+        const addStarsBtn = document.getElementById('addStarsBtn');
+
+        let uploadedImageBase64 = null; // Для хранения base64 изображения
+
+        // Обработчик клика по области загрузки изображения
+        imageUploadArea.addEventListener('click', () => {
+            chartImageUpload.click();
+        });
+
+        // Обработчик изменения файла в input
+        chartImageUpload.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    uploadedImageBase64 = e.target.result.split(',')[1]; // Сохраняем только base64 часть
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '#';
+                imagePreview.style.display = 'none';
+                uploadedImageBase64 = null;
+            }
+        });
+
+        // Обработчик клика по кнопкам вкладок
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Удаляем активный класс со всех кнопок и контента
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Добавляем активный класс к нажатой кнопке
+                button.classList.add('active');
+
+                // Показываем соответствующий контент
+                const targetTabId = button.dataset.tab;
+                document.getElementById(targetTabId).classList.add('active');
+            });
+        });
+
+        // Обработчик события для кнопки анализа
+        getAnalysisBtn.addEventListener('click', async () => {
+            if (!uploadedImageBase64) {
+                showErrorMessage('Пожалуйста, загрузите изображение графика для анализа.');
+                return;
+            }
+
+            showLoading(true);
+            hideErrorMessage();
+            hideAnalysisResult();
+
+            try {
+                // Имитация задержки для демонстрации загрузки
+                await new Promise(resolve => setTimeout(resolve, 2500)); // Увеличил задержку для лучшей демонстрации
+
+                // Заглушка для функционала
+                const dummyAnalysisData = {
+                    action: Math.random() < 0.5 ? 'КУПИТЬ' : 'ПРОДАТЬ', // Случайное действие
+                    entryPrice: '777',
+                    targetPrice: '777',
+                    stopLoss: '777',
+                    takeProfit: '777',
+                    technicalAnalysis: 'Технический анализ на основе вашего графика будет здесь. (демо)',
+                    newsAnalysis: 'Новостной анализ, связанный с графиком, будет здесь. (демо)'
+                };
+
+                // Обновляем UI с заглушечными данными
+                outputAction.textContent = dummyAnalysisData.action;
+                outputEntryPrice.textContent = dummyAnalysisData.entryPrice;
+                outputTargetPrice.textContent = dummyAnalysisData.targetPrice;
+                outputStopLoss.textContent = dummyAnalysisData.stopLoss;
+                outputTakeProfit.textContent = dummyAnalysisData.takeProfit;
+                outputTechnicalAnalysis.textContent = dummyAnalysisData.technicalAnalysis;
+                outputNewsAnalysis.textContent = dummyAnalysisData.newsAnalysis;
+
+                // Устанавливаем цвет для действия
+                if (dummyAnalysisData.action === 'КУПИТЬ') {
+                    outputAction.className = 'font-bold text-green-600';
+                } else if (dummyAnalysisData.action === 'ПРОДАТЬ') {
+                    outputAction.className = 'font-bold text-red-600';
+                } else {
+                    outputAction.className = 'font-bold text-gray-400';
+                }
+
+                showAnalysisResult();
+
+                // В будущем здесь будет реальный вызов AI для анализа изображения:
+                /*
+                const prompt = "Проанализируйте этот график и предоставьте торговые рекомендации (КУПИТЬ/ПРОДАТЬ/ДЕРЖАТЬ), цену входа, целевую цену, стоп-лосс, тейк-профит, краткий технический анализ и краткий новостной анализ. Форматируйте ответ как JSON объект.";
+                const chatHistory = [];
+                const payload = {
+                    contents: [
+                        {
+                            role: "user",
+                            parts: [
+                                { text: prompt },
+                                {
+                                    inlineData: {
+                                        mimeType: "image/jpeg", // Или "image/png" в зависимости от загруженного
+                                        data: uploadedImageBase64
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: { // Определите вашу схему здесь
+                            type: "OBJECT",
+                            properties: {
+                                "action": { "type": "STRING" },
+                                "entryPrice": { "type": "STRING" },
+                                "targetPrice": { "type": "STRING" },
+                                "stopLoss": { "type": "STRING" },
+                                "takeProfit": { "type": "STRING" },
+                                "technicalAnalysis": { "type": "STRING" },
+                                "newsAnalysis": { "type": "STRING" }
+                            }
+                        }
+                    }
+                };
+
+                const apiKey = ""; // API ключ будет предоставлен средой Canvas
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                // Обработка result и обновление UI
+                */
+
+            } catch (error) {
+                console.error('Ошибка при получении анализа:', error);
+                showErrorMessage('Произошла ошибка при получении анализа. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.');
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        // Обработчик для кнопки "Пополнить через Telegram Stars"
+        addStarsBtn.addEventListener('click', () => {
+            // Это демонстрация. В реальном приложении здесь будет вызов Telegram Mini Apps API
+            // Например: Telegram.WebApp.openInvoice('https://t.me/...');
+            // Или Telegram.WebApp.requestPayment('invoice_payload');
+            alert('Это демонстрация. В реальном приложении здесь откроется интерфейс покупки Telegram Stars.');
+        });
+
+        // Функция для показа/скрытия спиннера загрузки
+        function showLoading(isLoading) {
+            if (isLoading) {
+                buttonText.textContent = 'Загрузка...';
+                loadingSpinner.classList.remove('hidden');
+                getAnalysisBtn.disabled = true;
+            } else {
+                buttonText.textContent = 'Получить анализ';
+                loadingSpinner.classList.add('hidden');
+                getAnalysisBtn.disabled = false;
+            }
+        }
+
+        // Функция для показа секции с результатами анализа
+        function showAnalysisResult() {
+            analysisResult.classList.remove('hidden');
+        }
+
+        // Функция для скрытия секции с результатами анализа
+        function hideAnalysisResult() {
+            analysisResult.classList.add('hidden');
+        }
+
+        // Функция для показа сообщения об ошибке
+        function showErrorMessage(message) {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+        }
+
+        // Функция для скрытия сообщения об ошибке
+        function hideErrorMessage() {
+            errorMessage.classList.add('hidden');
+        }
+
+    </script>
+</body>
+</html>
