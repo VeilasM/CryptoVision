@@ -5,43 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CryptoVision - AI bot</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tone.js для звуковых эффектов -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <style>
-        /* Общие стили для темной темы, вдохновленные TradingView и логотипом */
         body {
             font-family: 'Inter', sans-serif;
-            /* Более темный синий фон с легким градиентом */
-            background: linear-gradient(to bottom, #000005, #05050A); /* Еще темнее */
+            background: linear-gradient(to bottom, #000000, #05050A);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Выравнивание по верху */
+            align-items: flex-start;
             min-height: 100vh;
             padding: 1rem;
             box-sizing: border-box;
-            color: #E2E8F0; /* Светлый текст */
-            position: relative; /* Для позиционирования нижней навигации */
-            padding-bottom: 5rem; /* Отступ для нижней навигации */
+            color: #E2E8F0;
+            position: relative;
+            padding-bottom: 4.5rem;
         }
         .container {
-            background-color: #0A0A14; /* Еще темнее синий фон для контейнера */
-            border-radius: 1.5rem; /* Более скругленные углы */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            background-color: #0A0A14;
+            border-radius: 1.5rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
             padding: 1.5rem;
             width: 100%;
-            max-width: 500px; /* Максимальная ширина для лучшей читаемости */
+            max-width: 500px;
             box-sizing: border-box;
-            min-height: 70vh; /* Минимальная высота для лучшего отображения */
+            min-height: 70vh;
             display: flex;
             flex-direction: column;
-            position: relative; /* Для внутренних элементов */
+            position: relative;
         }
         .page {
             display: none;
-            flex-grow: 1; /* Позволяет странице занимать доступное пространство */
+            flex-grow: 1;
             padding-top: 1rem;
             padding-bottom: 1rem;
-            animation: fadeIn 0.5s ease-out; /* Анимация появления страницы */
+            animation: fadeIn 0.5s ease-out;
         }
         .page.active {
             display: flex;
@@ -53,27 +49,26 @@
         }
 
         .btn-primary {
-            /* Сине-фиолетовый неоновый градиент */
-            background-image: linear-gradient(to right, #3A00C0 0%, #00E0FF 100%); /* Более насыщенный сине-фиолетовый */
+            background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
             color: white;
-            padding: 0.85rem 1.75rem; /* Увеличенный padding */
-            border-radius: 2rem; /* Круглая кнопка */
-            font-weight: 700; /* Более жирный шрифт */
+            padding: 0.85rem 1.75rem;
+            border-radius: 2rem;
+            font-weight: 700;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 224, 255, 0.4); /* Неоновая тень */
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
             cursor: pointer;
             border: none;
             outline: none;
-            text-transform: uppercase; /* Заглавные буквы */
-            letter-spacing: 0.05em; /* Небольшой интервал между буквами */
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         .btn-primary:hover {
             opacity: 0.95;
-            transform: translateY(-3px); /* Более выраженный подъем */
-            box-shadow: 0 8px 20px rgba(0, 224, 255, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.6);
         }
         .btn-secondary {
-            background-color: #1A1A2E; /* Темно-синий */
+            background-color: #1A1A2E;
             color: #E2E8F0;
             padding: 0.75rem 1.5rem;
             border-radius: 0.75rem;
@@ -87,8 +82,8 @@
             background-color: #2A2A3A;
         }
         .loading-spinner {
-            border: 4px solid #3A3A4A; /* Цвет спиннера под темную тему */
-            border-top: 4px solid #00FFFF; /* Неоновый синий акцент */
+            border: 4px solid #3A3A4A;
+            border-top: 4px solid #00FFFF;
             border-radius: 50%;
             width: 30px;
             height: 30px;
@@ -99,41 +94,57 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Обновленные стили для карточек анализа */
         .card {
-            background-color: #1A1A2E; /* Темно-синий фон для карточек */
-            border-radius: 1rem; /* Более скругленные углы */
+            background-color: #0F0F1A;
+            border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            padding: 1.5rem; /* Увеличенный отступ */
-            margin-top: 1rem; /* Отступ сверху */
-            border: none; /* Убираем рамку */
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: none;
         }
         .analysis-item span:first-child {
             font-weight: 600;
-            color: #00FFFF; /* Неоновый синий для заголовков */
+            color: #00FFFF;
         }
         .image-upload-area {
-            border: 2px dashed #2A2A3A; /* Синяя пунктирная рамка */
-            border-radius: 0.75rem;
+            background-color: #0F0F1A;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 1.5rem;
-            text-align: center;
+            min-height: 150px;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
-            margin-bottom: 1rem;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #1A1A2E;
         }
         .image-upload-area:hover {
-            border-color: #FF00FF; /* Неоновый пурпурный при наведении */
             background-color: #1A1A2E;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+        .upload-icon-img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 5px #00FFFF) drop-shadow(0 0 5px #6A00FF);
         }
         .image-preview {
             max-width: 100%;
             border-radius: 0.5rem;
             margin-top: 1rem;
-            display: none; /* Скрыто по умолчанию */
+            display: none;
             border: 1px solid #2A2A3A;
         }
+        .image-upload-area-content p {
+            text-align: center;
+        }
         .subscription-plan {
-            background-color: #1A1A2E; /* Темно-синий фон для планов подписки */
+            background-color: #0F0F1A;
             border: 1px solid #2A2A3A;
             border-radius: 0.75rem;
             padding: 1rem;
@@ -158,20 +169,19 @@
             max-width: 80px;
             margin: 0 auto 1rem;
         }
-        .text-green-600 { color: #00FF00; } /* Неоновый зеленый */
-        .text-red-600 { color: #FF0000; } /* Ярко-красный */
-        .text-blue-600 { color: #00FFFF; } /* Неоновый синий */
+        .text-green-600 { color: #00FF00; }
+        .text-red-600 { color: #FF0000; }
+        .text-blue-600 { color: #00FFFF; }
 
-        /* Стили для нового дизайна "Анализ" */
         .analysis-section-card {
-            background-color: #1A1A2E; /* Темно-синий фон для отдельных секций анализа */
+            background-color: #0F0F1A;
             border-radius: 1rem;
             padding: 1.5rem;
-            margin-bottom: 1rem; /* Отступ между секциями */
+            margin-bottom: 1rem;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .analysis-section-card h2 {
-            font-size: 1.25rem; /* Больше заголовок */
+            font-size: 1.25rem;
             font-weight: 700;
             color: #E2E8F0;
             margin-bottom: 1rem;
@@ -183,7 +193,7 @@
             gap: 1rem;
         }
         .insight-item {
-            background-color: #2A2A3A; /* Фон для отдельных инсайтов */
+            background-color: #1A1A2E;
             border-radius: 0.75rem;
             padding: 0.75rem 1rem;
             display: flex;
@@ -196,7 +206,7 @@
         .insight-item .icon {
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
-            color: #00FFFF; /* Неоновый синий акцент для иконок */
+            color: #00FFFF;
         }
         .insight-item .value {
             font-weight: 600;
@@ -208,13 +218,55 @@
             line-height: 1.6;
             font-size: 0.95rem;
         }
+        .collapsible-section {
+            background-color: #0F0F1A;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #E2E8F0;
+            cursor: pointer;
+            background-color: #1A1A2E;
+            border-bottom: 1px solid #0F0F1A;
+            transition: background-color 0.3s ease;
+        }
+        .collapsible-header:hover {
+            background-color: #2A2A3A;
+        }
+        .collapsible-header .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        .collapsible-header.active .arrow-icon {
+            transform: rotate(90deg);
+        }
+        .collapsible-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            color: #CBD5E1;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .collapsible-content.active {
+            max-height: 500px;
+            padding: 1.5rem;
+        }
         .detailed-analysis-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
         .detailed-analysis-list li {
-            background-color: #2A2A3A;
+            background-color: #1A1A2E;
             border-radius: 0.75rem;
             padding: 1rem;
             margin-bottom: 0.75rem;
@@ -225,7 +277,7 @@
             color: #E2E8F0;
         }
         .detailed-analysis-list li .number {
-            background-color: #4A00E0; /* Темно-фиолетовый для кружка с номером */
+            background-color: #4B0082;
             color: white;
             border-radius: 50%;
             width: 28px;
@@ -240,7 +292,7 @@
         }
         .detailed-analysis-list li .lock-icon {
             margin-left: 0.75rem;
-            color: #9CA3AF; /* Серый цвет для иконки замка */
+            color: #9CA3AF;
             font-size: 1.2rem;
             flex-shrink: 0;
         }
@@ -259,18 +311,18 @@
             margin-right: 0.75rem;
         }
         .feature-item.available .icon {
-            color: #00FF00; /* Неоновый зеленый для доступных */
+            color: #00FF00;
         }
         .feature-item.unavailable {
-            color: #718096; /* Серый для недоступных */
+            color: #718096;
         }
         .feature-item.unavailable .icon {
-            color: #FF0000; /* Ярко-красный для недоступных */
+            color: #FF0000;
         }
         .locked-content {
-            filter: blur(2px); /* Размытие для заблокированного контента */
-            pointer-events: none; /* Отключаем взаимодействие */
-            user-select: none; /* Отключаем выделение текста */
+            filter: blur(2px);
+            pointer-events: none;
+            user-select: none;
         }
         .lock-overlay {
             position: absolute;
@@ -278,7 +330,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6); /* Более темный оверлей */
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -288,84 +340,70 @@
             border-radius: 1rem;
             z-index: 10;
         }
-        /* Нижняя навигация */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #0A0A14; /* Еще темнее синий фон для навигации */
+            background-color: #05050F;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0.5rem 0;
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5); /* Более темная тень */
+            padding: 0.25rem 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
             border-top-left-radius: 1rem;
             border-top-right-radius: 1rem;
             z-index: 100;
+            height: 4.5rem;
         }
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             color: #CBD5E1;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             font-weight: 500;
-            padding: 0.5rem;
+            padding: 0.25rem;
             cursor: pointer;
             transition: color 0.3s ease;
         }
         .nav-item.active {
-            color: #00FFFF; /* Неоновый синий для активных иконок/текста */
+            color: #00FFFF;
         }
         .nav-item:hover {
-            color: #00FFFF; /* Неоновый синий при наведении */
+            color: #00FFFF;
         }
         .nav-item .nav-icon-circle {
-            background-color: #1A1A2E; /* Темно-синий фон круга */
+            background-color: #1A1A2E;
             border-radius: 50%;
-            width: 48px; /* Размер круга */
-            height: 48px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .nav-item.active .nav-icon-circle {
-            background-image: linear-gradient(to right, #4A00E0 0%, #00FFFF 100%); /* Градиент для активной кнопки */
-            box-shadow: 0 2px 10px rgba(0, 255, 255, 0.5);
+            background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
+            box-shadow: 0 2px 10px rgba(138, 43, 226, 0.5);
         }
         .nav-item .nav-icon {
-            font-size: 1.5rem;
-            color: #E2E8F0; /* Цвет иконки внутри круга */
+            font-size: 1.3rem;
+            color: #E2E8F0;
             transition: color 0.3s ease;
         }
         .nav-item.active .nav-icon {
-            color: white; /* Белый цвет иконки для активной кнопки */
+            color: white;
         }
-        /* Стили для логотипа */
-        .app-logo {
-            width: 100px; /* Размер логотипа */
-            height: 100px;
-            margin: 0 auto 1.5rem;
-            display: block;
-            /* Неоновое свечение */
-            filter: drop-shadow(0 0 8px #00FFFF) drop-shadow(0 0 8px #FF00FF);
-        }
-        /* Временно скрываем логотип */
-        .app-logo-hidden {
-            display: none;
-        }
-        /* Стили для модального окна загрузки */
         .loading-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный темный фон */
+            background-color: rgba(0, 0, 0, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -380,11 +418,11 @@
             visibility: visible;
         }
         .loading-modal-content {
-            background-color: #1A1A2E; /* Темно-синий фон */
+            background-color: #0F0F1A;
             border-radius: 1rem;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); /* Неоновое свечение */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
             transform: scale(0.8);
             opacity: 0;
             animation: scaleIn 0.3s forwards;
@@ -395,36 +433,170 @@
         .loading-text {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #00FFFF; /* Неоновый синий */
+            color: #00FFFF;
             margin-top: 1rem;
         }
         .loading-spinner-modal {
             border: 6px solid #3A3A4A;
-            border-top: 6px solid #00FFFF; /* Неоновый синий */
+            border-top: 6px solid #00FFFF;
             border-radius: 50%;
             width: 60px;
             height: 60px;
             animation: spin 1s linear infinite;
         }
+        .token-counter {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: #0F0F1A;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #4B0082;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .subscription-options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .subscription-option-card {
+            background-color: #1A1A2E;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .subscription-option-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+        .subscription-option-card h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #E2E8F0;
+            margin-bottom: 0.5rem;
+        }
+        .subscription-option-card p {
+            color: #CBD5E1;
+            font-size: 0.9rem;
+        }
+        .subscription-option-card .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00FFFF;
+            margin-top: 0.75rem;
+        }
+        .subscription-option-card .credits {
+            font-size: 0.8rem;
+            color: #9CA3AF;
+        }
+        .toggle-switch {
+            display: flex;
+            background-color: #1A1A2E;
+            border-radius: 1.5rem;
+            padding: 0.1rem;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+            width: 140px;
+            flex-shrink: 0;
+        }
+        .toggle-button {
+            flex: 1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #9CA3AF;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .toggle-button.active {
+            background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
+            color: white;
+            box-shadow: 0 1px 5px rgba(138, 43, 226, 0.4);
+        }
+        .toggle-button .save-badge {
+            background-color: #FF00FF;
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.05rem 0.3rem;
+            border-radius: 0.5rem;
+            margin-left: 0.3rem;
+            font-weight: 700;
+        }
+        .credit-select-box {
+            background-color: #2A2A3A;
+            border: 1px solid #3A3A4A;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            color: #E2E8F0;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 100%;
+            margin-top: 0.5rem;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23E2E8F0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+            cursor: pointer;
+        }
+        .credit-select-box option {
+            background-color: #2A2A3A;
+            color: #E2E8F0;
+        }
+
+        .subscription-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .subscription-options-container {
+                flex-direction: row;
+            }
+            .subscription-options-container .card {
+                flex: 1;
+                margin-top: 0;
+            }
+        }
+        .subscription-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        .subscription-header-row h3 {
+            margin-bottom: 0;
+            text-align: center;
+            flex-grow: 1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Логотип приложения (временно скрыт) -->
-        <img src="logo.png" alt="Логотип CryptoVision AI Bot" class="app-logo app-logo-hidden">
         <h1 class="text-2xl font-bold text-center mb-6">CryptoVision - AI бот</h1>
 
+        <div class="token-counter" id="tokenCounter">
+            Токенов: 100
+        </div>
 
-        <!-- Analysis Page (Main App) -->
         <div id="analysisPage" class="page active">
-            <h2 class="text-xl font-bold text-center mb-4">Посмотрите на ваш первый индивидуальный AI анализ графика:</h2>
-
             <div class="analysis-section-card mb-4">
-                <label for="chartImageUpload" class="block text-sm font-medium mb-2 text-gray-300">Загрузите изображение графика:</label>
+                <label for="chartImageUpload" class="block text-sm font-medium mb-2 text-gray-300 text-center">Загрузите изображение графика:</label>
                 <div class="image-upload-area" id="imageUploadArea">
                     <input type="file" id="chartImageUpload" accept="image/*" class="hidden">
-                    <p class="text-gray-400">Нажмите или перетащите файл сюда</p>
-                    <img id="imagePreview" class="image-preview mx-auto" src="#" alt="Предварительный просмотр графика">
+                    <div class="image-upload-area-content">
+                        <!-- Вставьте ваш тег <img> сюда, например: -->
+                        <!-- <img src="ваша_ссылка_на_изображение.png" alt="Иконка загрузки графика" class="upload-icon-img"> -->
+                        <img id="imagePreview" class="image-preview mx-auto" src="#" alt="Предварительный просмотр графика">
+                    </div>
                 </div>
             </div>
 
@@ -434,7 +606,6 @@
             </button>
 
             <div id="analysisResult" class="hidden">
-                <!-- Key Insights Section -->
                 <div class="analysis-section-card">
                     <h2>Ключевые Инсайты</h2>
                     <div class="key-insight-grid mb-4">
@@ -466,7 +637,6 @@
                     </div>
                 </div>
 
-                <!-- Game Plan Section -->
                 <div class="analysis-section-card">
                     <h2>План Действий</h2>
                     <p class="game-plan-text" id="outputGamePlan">
@@ -474,9 +644,76 @@
                     </p>
                 </div>
 
-                <!-- Detailed Analysis Section (Locked for basic plan) -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this, 'technicalAnalysisContent')">
+                        <span>Технический анализ</span>
+                        <span class="arrow-icon">▶</span>
+                    </div>
+                    <div class="collapsible-content" id="technicalAnalysisContent">
+                        <p class="font-bold text-lg mb-2">RSI: 71</p>
+                        <p>Превышает 70 – зона перекупленности, но давление покупателей сохраняется.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">MACD: Бычье пересечение</p>
+                        <p>Линии продолжают расходиться вверх – тренд усиливается.</p>
+                        <p>EMA20: Цена выше EMA</p>
+                        <p>Дневная свеча уверенно закрепилась выше – краткосрочный восходящий импульс.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Bollinger Bands: Расширяются вверх</p>
+                        <p>Цена у верхней полосы, подтверждение сильного движения вверх.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Ichimoku: Цена над облаком, Chikou выше цены</p>
+                        <p>Все элементы в бычьем положении – мощный ап-тренд.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Volume: Объёмы растут на росте</p>
+                        <p>Подтверждение спроса – активация покупателей.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">ADX: 36</p>
+                        <p>Сильный тренд – укрепляется.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Stochastic: 83</p>
+                        <p>В зоне перекупленности, но разворота пока не наблюдается.</p>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this, 'newsAnalysisContent')">
+                        <span>Новостной анализ</span>
+                        <span class="arrow-icon">▶</span>
+                    </div>
+                    <div class="collapsible-content" id="newsAnalysisContent">
+                        <p class="font-bold text-lg mb-2">Новостной анализ за 14 дней (на 07/2025)</p>
+                        <p>Наблюдается нарастающий оптимизм относительно Bitcoin, что подтверждается множеством новостей об ожидаемом росте его цены и пробоях в ключевых технических уровнях. Анализ говорит о потенциальных новых исторических максимумах, что создает положительное ожидание среди трейдеров. Индикаторы технического анализа, такие как 'Bollinger Bands', указывают на возможность крупных движений вверх. Данные о росте интереса к Bitcoin и наращивании ликвидности также дают основания считать, что актив находится на пути к успешному преодолению ключевых уровней, таких как $110,000. Тем не менее, некоторые аналитики замечают, что время для еще одного параболического роста может быть ограничено, что добавляет элемент осторожности к общему позитивному настрою.</p>
+                        <p class="font-bold text-lg mt-4 mb-2">ВЛИЯНИЕ: Позитивное</p>
+                        <p class="font-bold text-lg mt-4 mb-2">ОЦЕНКА ВЛИЯНИЯ: [🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜] 7/10</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Некоторые из новостей, прошедших аналитическую обработку:</p>
+                        <ul class="list-disc list-inside text-sm">
+                            <li><a href="https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis" target="_blank" class="text-blue-400 hover:underline">https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis</a></li>
+                            <li><a href="https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain" target="_blank" class="text-blue-400 hover:underline">https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain</a></li>
+                            <li><a href="https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up" target="_blank" class="text-blue-400 hover:underline">https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleCollapsible(this, 'aboutProjectContent')">
+                        <span>О ПРОЕКТЕ CRYPTOVISIONAI</span>
+                        <span class="arrow-icon">▶</span>
+                    </div>
+                    <div class="collapsible-content" id="aboutProjectContent">
+                        <p class="font-bold text-lg mb-2">Капитализация: 2366.24 млрд USD (1 место)</p>
+                        <p>Объем (24Ч): 23.07 млрд USD</p>
+                        <p>Ликвидность: 1.0%</p>
+                        <p>FDV: 2366.24 млрд USD</p>
+                        <p class="font-bold text-lg mt-4 mb-2">ATH: $119126.0000</p>
+                        <p>ATL: $67.8100</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Общее предложение: 19.89 млн монет</p>
+                        <p>Максимальное предложение: 21.00 млн монет</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Уровень блокчейна: Layer 1 (L1)</p>
+                        <p>Категория: Optimism Ecosystem</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Дата запуска: 2009-01-03</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Настроение сообщества: [🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜] 86%</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Сайт: <a href="http://www.bitcoin.org" target="_blank" class="text-blue-400 hover:underline">http://www.bitcoin.org</a></p>
+                        <p class="font-bold text-lg mt-4 mb-2">Twitter: Открыть</p>
+                        <p class="font-bold text-lg mt-4 mb-2">Reddit: Открыть</p>
+                    </div>
+                </div>
+
                 <div class="analysis-section-card relative">
-                    <h2>Детальный Анализ</h2>
+                    <h2>Детальный Анализ (Премиум)</h2>
                     <ul class="detailed-analysis-list locked-content">
                         <li>
                             <span class="number">1</span>
@@ -516,36 +753,65 @@
             </div>
         </div>
 
-        <!-- Payment Page (Now includes subscription plans) -->
         <div id="paymentPage" class="page">
             <h2 class="text-xl font-semibold text-center mb-4">Ваш План и Подписки</h2>
             <div class="payment-info card">
-                <p class="mb-4">Для оплаты подписок мы используем Telegram Stars.</p>
-                <!-- Баланс удален -->
+                <p class="text-lg font-bold mb-2">Текущий план: Базовый</p>
+                <p class="mb-2">Остаток токенов: <span class="font-bold text-blue-400" id="currentTokens">50</span></p>
+                <p class="mb-4">Подписка кончается: <span class="font-bold text-blue-400" id="subscriptionEndDate">--.--.----</span></p>
+                <p class="text-sm text-gray-400 mb-4">Все платежи осуществляются криптовалютой (TON). После оплаты система автоматически начислит токены.</p>
             </div>
 
-            <h2 class="text-xl font-semibold text-center mt-6 mb-4">Наши Подписки</h2>
-            <div class="subscription-plan">
-                <h3>Базовый план</h3>
-                <p>Доступ к базовому анализу.</p>
-                <p class="font-bold text-lg mt-2">Бесплатно</p>
+            <h2 class="text-xl font-semibold text-center mt-6 mb-4">Выберите опцию:</h2>
+
+            <div class="subscription-options-container">
+                <div class="card" id="payAsYouGoSection">
+                    <h3 class="text-xl font-bold text-center mb-4">Покупка токенов</h3>
+                    <label for="creditAmountSelect" class="block text-sm font-medium text-gray-400 mb-2">Количество:</label>
+                    <select id="creditAmountSelect" class="credit-select-box mb-4" onchange="updateCreditPrice()">
+                        <option value="5">5 кредитов</option>
+                        <option value="10">10 кредитов</option>
+                        <option value="75">75 кредитов</option>
+                        <option value="200">200 кредитов</option>
+                        <option value="500">500 кредитов</option>
+                        <option value="1200">1200 кредитов</option>
+                        <option value="4000">4000 кредитов</option>
+                        <option value="8000">8000 кредитов</option>
+                    </select>
+                    <p class="text-xl font-bold text-center mb-4"><span id="currentCreditPrice">$1.30</span></p>
+                    <p class="text-sm text-gray-400 text-center mb-4">Нужно больше? Пополняйте токены в любое время, сверх вашего текущего плана.</p>
+                    <button class="btn-primary w-full" onclick="purchaseCredits()">Купить токены</button>
+                </div>
+
+                <div class="card" id="subscriptionSection">
+                    <div class="relative mb-4">
+                        <h3 class="text-xl font-bold text-center m-0">Подписка</h3>
+                        <div class="toggle-switch absolute top-0 right-0">
+                            <div class="toggle-button active" id="monthlyToggle" onclick="toggleSubscriptionView('monthly')">Месячная</div>
+                            <div class="toggle-button" id="yearlyToggle" onclick="toggleSubscriptionView('yearly')">Годовая</div>
+                        </div>
+                    </div>
+                    <label for="planSelect" class="block text-sm font-medium text-gray-400 mb-2">План:</label>
+                    <select id="planSelect" class="credit-select-box mb-4" onchange="updateSubscriptionPrice()">
+                        <option value="starter_monthly">200 кредитов - Starter Plan</option>
+                        <option value="pro_monthly">650 кредитов - Pro Plan</option>
+                        <option value="vip_monthly">1500 кредитов - VIP Plan</option>
+                    </select>
+                    <p class="text-sm text-gray-400 text-center mb-2">Используйте до <span id="currentPlanCredits">200</span> кредитов в месяц</p>
+                    <p class="text-xl font-bold text-center mb-4"><span id="currentSubscriptionPrice">$18</span>/месяц</p>
+                    <button class="btn-primary w-full" onclick="upgradeSubscription()">Купить подписку</button>
+                </div>
             </div>
-            <div class="subscription-plan">
-                <h3>Премиум план</h3>
-                <p>Полный доступ к AI-анализу, расширенным инструментам и эксклюзивным сигналам.</p>
-                <p class="font-bold text-lg mt-2">9.99 Stars/месяц</p>
-                <button class="btn-primary w-full mt-3" onclick="requestSubscriptionPayment(999); playClickSound()">Подписаться</button>
-            </div>
-            <div class="subscription-plan">
-                <h3>VIP план</h3>
-                <p>Все возможности Премиум плана плюс персональные консультации и ранний доступ к новым функциям.</p>
-                <p class="font-bold text-lg mt-2">29.99 Stars/месяц</p>
-                <button class="btn-primary w-full mt-3" onclick="requestSubscriptionPayment(2999); playClickSound()">Подписаться</button>
+
+            <div class="card">
+                <h2 class="text-xl font-semibold text-center mb-4">О ПРОЕКТЕ CRYPTOVISIONAI</h2>
+                <p class="text-gray-300">
+                    CryptoVisionAI — это передовая платформа, использующая искусственный интеллект для предоставления глубокого анализа криптовалютных рынков. Наша цель — дать вам инструменты и инсайты, необходимые для принятия обоснованных торговых решений. Мы объединяем технический и новостной анализ, чтобы предоставить вам комплексную картину рынка.
+                </p>
             </div>
         </div>
 
-        <!-- Instruction Modal -->
-        <div id="instructionModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden">
+        <div id="instructionModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-content-center p-4 hidden">
             <div class="bg-gray-800 rounded-lg p-6 max-w-sm w-full relative">
                 <h2 class="text-xl font-bold text-white mb-4 text-center">Инструкция</h2>
                 <p class="text-gray-300 mb-4">
@@ -554,13 +820,12 @@
                     3. AI предоставит вам ключевые инсайты и план действий.<br>
                     4. Для детального анализа и расширенных функций рассмотрите Премиум или VIP план.
                 </p>
-                <button class="btn-primary w-full" onclick="hideInstructionModal(); playClickSound()">Понятно</button>
+                <button class="btn-primary w-full" onclick="hideInstructionModal()">Понятно</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Модальное окно загрузки -->
     <div id="loadingModal" class="loading-modal">
         <div class="loading-modal-content">
             <div class="loading-spinner-modal"></div>
@@ -568,17 +833,16 @@
         </div>
     </div>
 
-    <!-- Нижняя навигация -->
     <div class="bottom-nav">
-        <div class="nav-item active" data-page="analysisPage" onclick="showPage('analysisPage'); playClickSound(); activateNav(this)">
+        <div class="nav-item active" data-page="analysisPage" onclick="showPage('analysisPage'); activateNav(this)">
             <div class="nav-icon-circle">
                 <span class="nav-icon">📈</span>
             </div>
             <span>Анализ</span>
         </div>
-        <div class="nav-item" data-page="paymentPage" onclick="showPage('paymentPage'); playClickSound(); activateNav(this)">
+        <div class="nav-item" data-page="paymentPage" onclick="showPage('paymentPage'); activateNav(this)">
             <div class="nav-icon-circle">
-                <span class="nav-icon">⭐</span> <!-- Иконка звезды для оплаты/подписок -->
+                <span class="nav-icon">⭐</span>
             </div>
             <span>Подписка</span>
         </div>
@@ -586,18 +850,15 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // Получаем ссылки на элементы DOM
         const chartImageUpload = document.getElementById('chartImageUpload');
         const imageUploadArea = document.getElementById('imageUploadArea');
         const imagePreview = document.getElementById('imagePreview');
         const getAnalysisBtn = document.getElementById('getAnalysisBtn');
         const buttonText = document.getElementById('buttonText');
-        const loadingSpinner = document.getElementById('loadingSpinner'); // Этот спиннер теперь не используется на кнопке
         const analysisResult = document.getElementById('analysisResult');
         const errorMessage = document.getElementById('errorMessage');
         const errorText = document.getElementById('errorText');
 
-        // Элементы вывода анализа
         const outputAction = document.getElementById('outputAction');
         const outputEntryPrice = document.getElementById('outputEntryPrice');
         const outputTargetPrice = document.getElementById('outputTargetPrice');
@@ -615,86 +876,63 @@
         const detailedAnalysis5 = document.getElementById('detailedAnalysis5');
         const detailedAnalysisLockOverlay = document.getElementById('detailedAnalysisLockOverlay');
 
-
-        // Элементы страниц и модальных окон
         const analysisPage = document.getElementById('analysisPage');
         const paymentPage = document.getElementById('paymentPage');
         const instructionModal = document.getElementById('instructionModal');
-        const loadingModal = document.getElementById('loadingModal'); // Новое модальное окно загрузки
-
-
-        // Кнопки пополнения Stars и баланс
-        const userStarsBalance = document.getElementById('userStarsBalance'); // Этот элемент теперь не используется
+        const loadingModal = document.getElementById('loadingModal');
 
         const navItems = document.querySelectorAll('.nav-item');
 
-        let uploadedImageBase64 = null; // Для хранения base64 изображения
+        const tokenCounter = document.getElementById('tokenCounter');
+        const currentTokens = document.getElementById('currentTokens');
+        const subscriptionEndDate = document.getElementById('subscriptionEndDate');
 
-        // Инициализация Telegram Web App
+        const monthlyToggle = document.getElementById('monthlyToggle');
+        const yearlyToggle = document.getElementById('yearlyToggle');
+        const payAsYouGoSection = document.getElementById('payAsYouGoSection');
+        const subscriptionSection = document.getElementById('subscriptionSection');
+        const creditAmountSelect = document.getElementById('creditAmountSelect');
+        const currentCreditPrice = document.getElementById('currentCreditPrice');
+        const planSelect = document.getElementById('planSelect');
+        const currentPlanCredits = document.getElementById('currentPlanCredits');
+        const currentSubscriptionPrice = document.getElementById('currentSubscriptionPrice');
+
+
+        let uploadedImageBase64 = null;
+
         if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
             Telegram.WebApp.ready();
-            Telegram.WebApp.expand(); // Разворачиваем мини-приложение на весь экран для лучшего UX
+            Telegram.WebApp.expand();
         } else {
             console.warn('Telegram Web App API not available. Running in standalone mode. Real payments will not work.');
         }
 
-        // --- Звуковые эффекты ---
-        const synth = new Tone.Synth().toDestination();
-
-        function playClickSound() {
-            if (Tone.context.state !== 'running') {
-                Tone.context.resume();
-            }
-            synth.triggerAttackRelease('C4', '8n'); // Короткий клик
-        }
-
-        function playSuccessSound() {
-            if (Tone.context.state !== 'running') {
-                Tone.context.resume();
-            }
-            const now = Tone.context.currentTime;
-            synth.triggerAttackRelease('C4', '8n', now);
-            synth.triggerAttackRelease('E4', '8n', now + 0.1);
-            synth.triggerAttackRelease('G4', '8n', now + 0.2); // Мажорный аккорд
-        }
-
-        function playErrorSound() {
-            if (Tone.context.state !== 'running') {
-                Tone.context.resume();
-            }
-            synth.triggerAttackRelease('C3', '8n', Tone.context.currentTime, 0.5);
-            synth.triggerAttackRelease('B2', '8n', Tone.context.currentTime + 0.1, 0.5); // Диссонирующий звук
-        }
-        // --- Конец звуковых эффектов ---
-
-        // Функция для переключения страниц
         function showPage(pageId) {
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            // Прокручиваем страницу вверх при смене
             window.scrollTo(0, 0);
         }
 
-        // Функция для активации элемента нижней навигации
         function activateNav(element) {
             navItems.forEach(item => item.classList.remove('active'));
             element.classList.add('active');
         }
 
-        // Функция для показа модального окна инструкции
+        function toggleCollapsible(headerElement, contentId) {
+            const content = document.getElementById(contentId);
+            headerElement.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+
         function showInstructionModal() {
             instructionModal.classList.remove('hidden');
-            playClickSound(); // Звук при открытии модалки
         }
 
-        // Функция для скрытия модального окна инструкции
         function hideInstructionModal() {
             instructionModal.classList.add('hidden');
-            playClickSound(); // Звук при закрытии модалки
         }
 
-        // Функции для управления модальным окном загрузки
         function showLoadingModal() {
             loadingModal.classList.add('active');
         }
@@ -703,14 +941,10 @@
             loadingModal.classList.remove('active');
         }
 
-
-        // Обработчик клика по области загрузки изображения
         imageUploadArea.addEventListener('click', () => {
             chartImageUpload.click();
-            playClickSound();
         });
 
-        // Обработчик изменения файла в input
         chartImageUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
@@ -718,10 +952,9 @@
                 reader.onload = (e) => {
                     imagePreview.src = e.target.result;
                     imagePreview.style.display = 'block';
-                    uploadedImageBase64 = e.target.result.split(',')[1]; // Сохраняем только base64 часть
+                    uploadedImageBase64 = e.target.result.split(',')[1];
                 };
                 reader.readAsDataURL(file);
-                playClickSound(); // Звук при выборе файла
             } else {
                 imagePreview.src = '#';
                 imagePreview.style.display = 'none';
@@ -729,28 +962,22 @@
             }
         });
 
-        // Обработчик события для кнопки анализа
         getAnalysisBtn.addEventListener('click', async () => {
             if (!uploadedImageBase64) {
                 showErrorMessage('Пожалуйста, загрузите изображение графика для анализа.');
-                playErrorSound(); // Звук ошибки
                 return;
             }
 
-            // Показываем модальное окно загрузки
             showLoadingModal();
-            playClickSound(); // Звук при нажатии кнопки
 
             hideErrorMessage();
             hideAnalysisResult();
 
             try {
-                // Имитация задержки для демонстрации загрузки
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Задержка 5 секунд
+                await new Promise(resolve => setTimeout(resolve, 5000));
 
-                // Заглушка для функционала
                 const dummyAnalysisData = {
-                    action: Math.random() < 0.5 ? 'КУПИТЬ' : 'ПРОДАТЬ', // Случайное действие
+                    action: Math.random() < 0.5 ? 'КУПИТЬ' : 'ПРОДАТЬ',
                     entryPrice: '777',
                     targetPrice: '777',
                     stopLoss: '777',
@@ -767,10 +994,9 @@
                         'Доминирование разворотных свечей',
                         'Поддержка и сопротивление'
                     ],
-                    planLevel: 'basic' // 'basic', 'premium', 'vip' - для демонстрации блокировки
+                    planLevel: 'basic'
                 };
 
-                // Обновляем UI с заглушечными данными
                 outputAction.textContent = dummyAnalysisData.action;
                 outputEntryPrice.textContent = dummyAnalysisData.entryPrice;
                 outputTargetPrice.textContent = dummyAnalysisData.targetPrice;
@@ -787,8 +1013,6 @@
                 detailedAnalysis4.textContent = dummyAnalysisData.detailedAnalysis[3];
                 detailedAnalysis5.textContent = dummyAnalysisData.detailedAnalysis[4];
 
-
-                // Устанавливаем цвет для действия
                 if (dummyAnalysisData.action === 'КУПИТЬ') {
                     outputAction.className = 'font-bold text-green-600';
                 } else if (dummyAnalysisData.action === 'ПРОДАТЬ') {
@@ -797,7 +1021,6 @@
                     outputAction.className = 'font-bold text-gray-400';
                 }
 
-                // Управление блокировкой детального анализа
                 if (dummyAnalysisData.planLevel === 'basic') {
                     detailedAnalysisLockOverlay.classList.remove('hidden');
                 } else {
@@ -805,106 +1028,137 @@
                 }
 
                 showAnalysisResult();
-                playSuccessSound(); // Звук успеха после анализа
-
-                // В будущем здесь будет реальный вызов AI для анализа изображения:
-                /*
-                const prompt = "Проанализируйте этот график и предоставьте торговые рекомендации (КУПИТЬ/ПРОДАТЬ/ДЕРЖАТЬ), цену входа, целевую цену, стоп-лосс, тейк-профит, краткий технический анализ и краткий новостной анализ. Форматируйте ответ как JSON объект.";
-                const chatHistory = [];
-                const payload = {
-                    contents: [
-                        {
-                            role: "user",
-                            parts: [
-                                { text: prompt },
-                                {
-                                    inlineData: {
-                                        mimeType: "image/jpeg", // Или "image/png" в зависимости от загруженного
-                                        data: uploadedImageBase64
-                                    }
-                                }
-                            ]
-                        }
-                    ],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: { // Определите вашу схему здесь
-                            type: "OBJECT",
-                            properties: {
-                                "action": { "type": "STRING" },
-                                "entryPrice": { "type": "STRING" },
-                                "targetPrice": { "type": "STRING" },
-                                "stopLoss": { "type": "STRING" },
-                                "takeProfit": { "type": "STRING" },
-                                "technicalAnalysis": { "type": "STRING" },
-                                "newsAnalysis": { "type": "STRING" }
-                            }
-                        }
-                    }
-                };
-
-                const apiKey = ""; // API ключ будет предоставлен средой Canvas
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-                // Обработка result и обновление UI
-                */
 
             } catch (error) {
                 console.error('Ошибка при получении анализа:', error);
                 showErrorMessage('Произошла ошибка при получении анализа. Пожалуйста, проверьте ваше интернет-соединение или попробуйте позже.');
-                playErrorSound(); // Звук ошибки
             } finally {
-                hideLoadingModal(); // Скрываем модальное окно загрузки
+                hideLoadingModal();
             }
         });
 
-        // Функция для запроса платежа Stars за подписку
-        function requestSubscriptionPayment(starsAmount) {
-            // В реальном приложении здесь будет логика для создания инвойса на сервере бота
-            // и получения invoice_url или invoice_payload
-            const invoicePayload = `subscription_plan_${starsAmount}`; // Пример payload
+        function requestSubscriptionPayment(starsAmount, payloadType) {
+            const invoicePayload = `${payloadType}_${starsAmount}`;
 
             if (Telegram.WebApp && Telegram.WebApp.requestPayment) {
                 Telegram.WebApp.requestPayment({
-                    amount: starsAmount, // Сумма в Stars (целые числа)
-                    asset: 'stars', // Всегда 'stars' для Telegram Stars
+                    amount: starsAmount,
+                    asset: 'stars',
                     payload: invoicePayload
                 }, (status) => {
                     if (status.status === 'succeeded') {
-                        // updateStarsBalance(starsAmount); // Демо-обновление баланса (удалено)
-                        Telegram.WebApp.showAlert(`Подписка на ${starsAmount / 100} Stars успешно оплачена!`);
-                        playSuccessSound();
+                        Telegram.WebApp.showAlert(`Покупка успешно оплачена!`);
                     } else {
                         Telegram.WebApp.showAlert(`Ошибка оплаты или отмена: ${status.status}`);
-                        playErrorSound();
                     }
                 });
             } else {
                 console.warn(`Telegram Web App API not available. Cannot request payment for ${starsAmount / 100} Stars.`);
                 Telegram.WebApp.showAlert(`Демо: Запрос платежа на ${starsAmount / 100} Stars. В реальном приложении откроется платежный интерфейс Telegram Stars.`);
-                playErrorSound();
             }
         }
 
-        // Демо-функция для обновления баланса Stars (удалена, так как баланс не отображается)
-        /*
-        function updateStarsBalance(amount) {
-            let currentBalance = parseFloat(userStarsBalance.textContent.replace(' Stars', ''));
-            currentBalance += amount / 100; // Делим на 100, так как в UI отображаем 9.99, а в API целые числа
-            userStarsBalance.textContent = `${currentBalance.toFixed(2)} Stars`;
-        }
-        */
+        const creditPrices = {
+            '5': 1.30, '10': 2.50, '75': 15.00, '200': 30.00, '500': 60.00, '1200': 100.00, '4000': 250.00, '8000': 400.00
+        };
+        const monthlyPlanDetails = {
+            'starter_monthly': { credits: 200, price: 18 },
+            'pro_monthly': { credits: 650, price: 45 },
+            'vip_monthly': { credits: 1500, price: 90 }
+        };
+        const yearlyPlanDetails = {
+            'starter_yearly': { credits: 200, price: 18 * 12 * 0.7 },
+            'pro_yearly': { credits: 650, price: 45 * 12 * 0.7 },
+            'vip_yearly': { credits: 1500, price: 90 * 12 * 0.7 }
+        };
+        let currentSubscriptionType = 'monthly';
 
-        // Функция для показа/скрытия спиннера загрузки (старая, теперь используется showLoadingModal/hideLoadingModal)
+        function updateCreditPrice() {
+            const selectedCredits = creditAmountSelect.value;
+            const price = creditPrices[selectedCredits];
+            currentCreditPrice.textContent = `$${price.toFixed(2)}`;
+        }
+
+        function updateSubscriptionPrice() {
+            let selectedPlanValue = planSelect.value;
+            let details;
+            let displayedCredits;
+
+            if (currentSubscriptionType === 'monthly') {
+                if (!selectedPlanValue.includes('_monthly')) {
+                    selectedPlanValue = 'starter_monthly';
+                }
+                planSelect.innerHTML = `
+                    <option value="starter_monthly">200 кредитов - Starter Plan</option>
+                    <option value="pro_monthly">650 кредитов - Pro Plan</option>
+                    <option value="vip_monthly">1500 кредитов - VIP Plan</option>
+                `;
+                planSelect.value = selectedPlanValue;
+                details = monthlyPlanDetails[selectedPlanValue];
+                displayedCredits = details ? details.credits : 0;
+            } else {
+                if (!selectedPlanValue.includes('_yearly')) {
+                    selectedPlanValue = 'starter_yearly';
+                }
+                planSelect.innerHTML = `
+                    <option value="starter_yearly">200 кредитов/мес. - Starter Plan</option>
+                    <option value="pro_yearly">650 кредитов/мес. - Pro Plan</option>
+                    <option value="vip_yearly">1500 кредитов/мес. - VIP Plan</option>
+                `;
+                planSelect.value = selectedPlanValue;
+                details = yearlyPlanDetails[selectedPlanValue];
+                displayedCredits = monthlyPlanDetails[selectedPlanValue.replace('_yearly', '_monthly')].credits;
+            }
+
+            if (!details) {
+                planSelect.value = planSelect.options[0].value;
+                selectedPlanValue = planSelect.value;
+                if (currentSubscriptionType === 'monthly') {
+                    details = monthlyPlanDetails[selectedPlanValue];
+                } else {
+                    details = yearlyPlanDetails[selectedPlanValue];
+                }
+                displayedCredits = monthlyPlanDetails[selectedPlanValue.replace('_yearly', '_monthly')].credits;
+            }
+
+            currentPlanCredits.textContent = displayedCredits;
+            currentSubscriptionPrice.textContent = `$${details.price.toFixed(2)}/${currentSubscriptionType === 'monthly' ? 'месяц' : 'год'}`;
+        }
+
+        function toggleSubscriptionView(type) {
+            currentSubscriptionType = type;
+            if (type === 'monthly') {
+                monthlyToggle.classList.add('active');
+                yearlyToggle.classList.remove('active');
+            } else {
+                monthlyToggle.classList.remove('active');
+                yearlyToggle.classList.add('active');
+            }
+            updateSubscriptionPrice();
+        }
+
+        function purchaseCredits() {
+            const selectedCredits = creditAmountSelect.value;
+            const priceInUSD = creditPrices[selectedCredits];
+            const starsAmount = Math.round(priceInUSD * 100);
+            requestSubscriptionPayment(starsAmount, `purchase_credits_${selectedCredits}`);
+        }
+
+        function upgradeSubscription() {
+            const selectedPlan = planSelect.value;
+            let details;
+            if (currentSubscriptionType === 'monthly') {
+                details = monthlyPlanDetails[selectedPlan];
+            } else {
+                details = yearlyPlanDetails[selectedPlan];
+            }
+            const priceInUSD = details.price;
+            const starsAmount = Math.round(priceInUSD * 100);
+            requestSubscriptionPayment(starsAmount, `upgrade_plan_${selectedPlan}`);
+        }
+
+
         function showLoading(isLoading) {
-            // Эта функция теперь не используется для управления спиннером на кнопке,
-            // но может быть использована для изменения текста кнопки
             if (isLoading) {
                 buttonText.textContent = 'Загрузка...';
                 getAnalysisBtn.disabled = true;
@@ -914,27 +1168,30 @@
             }
         }
 
-        // Функция для показа секции с результатами анализа
         function showAnalysisResult() {
             analysisResult.classList.remove('hidden');
         }
 
-        // Функция для скрытия секции с результатами анализа
         function hideAnalysisResult() {
             analysisResult.classList.add('hidden');
         }
 
-        // Функция для показа сообщения об ошибке
         function showErrorMessage(message) {
             errorText.textContent = message;
             errorMessage.classList.remove('hidden');
         }
 
-        // Функция для скрытия сообщения об ошибке
         function hideErrorMessage() {
             errorMessage.classList.add('hidden');
         }
 
+        document.addEventListener('DOMContentLoaded', () => {
+            currentTokens.textContent = '50';
+            subscriptionEndDate.textContent = '15.08.2025';
+            updateCreditPrice();
+            updateSubscriptionPrice();
+            toggleSubscriptionView('monthly');
+        });
     </script>
 </body>
 </html>
