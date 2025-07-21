@@ -103,8 +103,8 @@ body {
     border-radius: 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     padding: 0;
-    height: 300px;
-    width: 300px;
+    height: 200px;
+    width: 200px;
     margin: 0 auto 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -795,16 +795,16 @@ body {
     margin-bottom: 2rem;
 }
 #analysisPage .image-upload-area {
-    max-width: 300px;
-    min-height: 300px;
+    max-width: 200px;
+    min-height: 200px;
     margin-bottom: 0.5rem;
     border: 2px dashed #FFF;
     background-color: #000;
     position: relative;
 }
 #analysisPage .image-upload-area .upload-icon-img {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
     filter: none;
 }
 #analysisPage .image-upload-area .upload-text {
