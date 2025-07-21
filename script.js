@@ -1,7 +1,13 @@
 const chartImageUpload = document.getElementById('chartImageUpload');
 const imageUploadArea = document.getElementById('imageUploadArea');
-const imagePreview = document.getElementById('imagePreview'); // Возвращаем эту переменную
+const imagePreview = document.getElementById('imagePreview');
 const uploadText = document.getElementById('uploadText');
+
+const chartImageUploadHome = document.getElementById('chartImageUploadHome');
+const imageUploadAreaHome = document.getElementById('imageUploadAreaHome');
+const imagePreviewHome = document.getElementById('imagePreviewHome');
+const uploadTextHome = document.getElementById('uploadTextHome');
+
 const getAnalysisBtn = document.getElementById('getAnalysisBtn');
 const buttonText = document.getElementById('buttonText');
 const analysisResult = document.getElementById('analysisResult');
@@ -16,30 +22,78 @@ const outputTrend = document.getElementById('outputTrend');
 const outputVolatility = document.getElementById('outputVolatility');
 const outputVolume = document.getElementById('outputVolume');
 const outputSentiment = document.getElementById('outputSentiment');
-const detailedAnalysis1 = document.getElementById('detailedAnalysis1');
-const detailedAnalysis2 = document.getElementById('detailedAnalysis2');
-const detailedAnalysis3 = document.getElementById('detailedAnalysis3');
-const detailedAnalysis4 = document.getElementById('detailedAnalysis4');
-const detailedAnalysis5 = document.getElementById('detailedAnalysis5');
 const homePage = document.getElementById('homePage');
 const analysisPage = document.getElementById('analysisPage');
-const paymentPage = document.getElementById('paymentPage');
+
 const searchPage = document.createElement('div');
 searchPage.id = 'searchPage';
 searchPage.className = 'page';
-searchPage.innerHTML = '<h2 class="text-xl font-semibold text-center mb-4">Поиск Информации</h2><p class="text-gray-300 text-center">Эта страница находится в разработке.</p>';
+searchPage.innerHTML = '<h2 class="text-xl font-semibold text-center mb-4 text-white">Поиск Информации</h2><p class="text-white text-center">Эта страница находится в разработке.</p>';
 document.querySelector('.container').appendChild(searchPage);
+
+const chatPage = document.createElement('div');
+chatPage.id = 'chatPage';
+chatPage.className = 'page';
+chatPage.innerHTML = '<h2 class="text-xl font-semibold text-center mb-4 text-white">AI Чат</h2><p class="text-white text-center">Эта страница находится в разработке.</p>';
+document.querySelector('.container').appendChild(chatPage);
+
 const profilePage = document.createElement('div');
 profilePage.id = 'profilePage';
 profilePage.className = 'page';
-profilePage.innerHTML = '<h2 class="text-xl font-semibold text-center mb-4">Профиль Пользователя</h2><p class="text-gray-300 text-center">Здесь будет ваша информация, рефералы и настройки.</p>';
+profilePage.innerHTML = `
+    <p class="text-lg font-bold mb-2 text-white text-center">Текущий план: Базовый</p>
+    <p class="mb-2 text-white text-center">Остаток токенов: <span class="font-bold text-white" id="currentTokens">50</span></p>
+    <p class="mb-4 text-white text-center">Подписка кончается: <span class="font-bold text-white" id="subscriptionEndDate">--.--.----</span></p>
+    <h2 class="text-xl font-semibold text-center mt-6 mb-4 text-white">Выберите опцию:</h2>
+
+    <div class="subscription-options-container">
+        <div class="card" id="payAsYouGoSection">
+            <h3 class="text-xl font-bold text-center mb-4 text-white">Покупка токенов</h3>
+            <label for="creditAmountSelect" class="block text-sm font-medium text-white mb-2">Количество:</label>
+            <select id="creditAmountSelect" class="credit-select-box mb-4" onchange="updateCreditPrice()">
+                <option value="5">5 кредитов</option>
+                <option value="10">10 кредитов</option>
+                <option value="75">75 кредитов</option>
+                <option value="200">200 кредитов</option>
+                <option value="500">500 кредитов</option>
+                <option value="1200">1200 кредитов</option>
+                <option value="4000">4000 кредитов</option>
+                <option value="8000">8000 кредитов</option>
+            </select>
+            <p class="text-xl font-bold text-center mb-4 text-white"><span id="currentCreditPrice">$1.30</span></p>
+            <p class="text-sm text-white text-center mb-4">Нужно больше? Пополняйте токены в любое время, сверх вашего текущего плана.</p>
+            <button class="btn-primary w-full" onclick="purchaseCredits()">Купить токены</button>
+        </div>
+
+        <div class="card" id="subscriptionSection">
+            <div class="relative mb-4">
+                <h3 class="text-xl font-bold text-center m-0 text-white">Подписка</h3>
+                <div class="toggle-switch absolute top-0 right-0">
+                    <div class="toggle-button active" id="monthlyToggle" onclick="toggleSubscriptionView('monthly')">Месячная</div>
+                    <div class="toggle-button" id="yearlyToggle" onclick="toggleSubscriptionView('yearly')">Годовая</div>
+                </div>
+            </div>
+            <label for="planSelect" class="block text-sm font-medium text-white mb-2">План:</label>
+            <select id="planSelect" class="credit-select-box mb-4" onchange="updateSubscriptionPrice()">
+                <option value="starter_monthly">200 кредитов - Starter Plan</option>
+                <option value="pro_monthly">650 кредитов - Pro Plan</option>
+                <option value="vip_monthly">1500 кредитов - VIP Plan</option>
+            </select>
+            <p class="text-sm text-white text-center mb-2">Используйте до <span id="currentPlanCredits">200</span> кредитов в месяц</p>
+            <p class="text-xl font-bold text-center mb-4 text-white"><span id="currentSubscriptionPrice">$18</span>/месяц</p>
+            <button class="btn-primary w-full" onclick="upgradeSubscription()">Купить подписку</button>
+        </div>
+    </div>
+`;
 document.querySelector('.container').appendChild(profilePage);
+
 const instructionModal = document.getElementById('instructionModal');
 const loadingModal = document.getElementById('loadingModal');
 const splashScreen = document.getElementById('splashScreen');
 const navItems = document.querySelectorAll('.nav-item');
 const tokenCounter = document.getElementById('tokenCounter');
 const headerTokens = document.getElementById('headerTokens');
+// Удалено: const profileTokens = document.getElementById('profileTokens');
 const currentTokens = document.getElementById('currentTokens');
 const subscriptionEndDate = document.getElementById('subscriptionEndDate');
 const monthlyToggle = document.getElementById('monthlyToggle');
@@ -52,10 +106,10 @@ const planSelect = document.getElementById('planSelect');
 const currentPlanCredits = document.getElementById('currentPlanCredits');
 const currentSubscriptionPrice = document.getElementById('currentSubscriptionPrice');
 const uploadAndAnalyzeBtn = document.getElementById('uploadAndAnalyzeBtn');
-const uploadImagePlaceholder = document.getElementById('uploadImagePlaceholder'); // Возвращаем эту переменную
-const detailedAnalysisLockOverlay = document.getElementById('detailedAnalysisLockOverlay');
+const uploadImagePlaceholder = document.getElementById('uploadImagePlaceholder');
 
 let uploadedImageBase64 = null;
+let uploadedImageBase64Home = null;
 let userPlanLevel = 'basic';
 
 const disclaimerTextElement = document.getElementById('disclaimerText');
@@ -115,12 +169,11 @@ chartImageUpload.addEventListener('change', (event) => {
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            // imagePreview теперь снова тег <img>
             imagePreview.src = e.target.result;
             imagePreview.style.display = 'block';
             uploadText.style.display = 'none';
             if (uploadImagePlaceholder) {
-                uploadImagePlaceholder.style.display = 'none'; // Скрываем плейсхолдер
+                uploadImagePlaceholder.style.display = 'none';
             }
             uploadedImageBase64 = e.target.result.split(',')[1];
         };
@@ -130,7 +183,50 @@ chartImageUpload.addEventListener('change', (event) => {
         imagePreview.style.display = 'none';
         uploadText.style.display = 'block';
         if (uploadImagePlaceholder) {
-                uploadImagePlaceholder.style.display = 'block'; // Показываем плейсхолдер
+                uploadImagePlaceholder.style.display = 'block';
+        }
+        uploadedImageBase64 = null;
+    }
+});
+
+imageUploadAreaHome.addEventListener('click', () => {
+    chartImageUploadHome.click();
+});
+
+chartImageUploadHome.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagePreviewHome.src = e.target.result;
+            imagePreviewHome.style.display = 'block';
+            uploadTextHome.style.display = 'none';
+            if (uploadImagePlaceholderHome) {
+                uploadImagePlaceholderHome.style.display = 'none';
+            }
+            uploadedImageBase64Home = e.target.result.split(',')[1];
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block';
+            uploadText.style.display = 'none';
+            if (uploadImagePlaceholder) {
+                uploadImagePlaceholder.style.display = 'none';
+            }
+            uploadedImageBase64 = e.target.result.split(',')[1];
+        };
+        reader.readAsDataURL(file);
+    } else {
+        imagePreviewHome.src = '#';
+        imagePreviewHome.style.display = 'none';
+        uploadTextHome.style.display = 'block';
+        if (uploadImagePlaceholderHome) {
+            uploadImagePlaceholderHome.style.display = 'block';
+        }
+        uploadedImageBase64Home = null;
+        imagePreview.src = '#';
+        imagePreview.style.display = 'none';
+        uploadText.style.display = 'block';
+        if (uploadImagePlaceholder) {
+            uploadImagePlaceholder.style.display = 'block';
         }
         uploadedImageBase64 = null;
     }
@@ -157,13 +253,6 @@ getAnalysisBtn.addEventListener('click', async () => {
             volatility: '⭐⭐⭐⭐⬜',
             volume: 'Высокий',
             sentiment: 'Позитивное',
-            detailedAnalysis: [
-                'Внутридневная волатильность: Высокая, что предоставляет возможности для краткосрочной торговли.',
-                'Всплески объема во время разворотов: Наблюдаются значительные объемы при смене тренда, подтверждая силу движения.',
-                'Отсутствие всеобъемлющего тренда: Рынок демонстрирует боковое движение с частыми коррекциями.',
-                'Доминирование разворотных свечей: Формируются паттерны, указывающие на смену направления цены.',
-                'Поддержка и сопротивление: Ключевые уровни $95,000 (поддержка) и $105,000 (сопротивление) остаются важными.'
-            ],
             planLevel: 'basic'
         };
 
@@ -176,22 +265,16 @@ getAnalysisBtn.addEventListener('click', async () => {
         outputVolatility.textContent = dummyAnalysisData.volatility;
         outputVolume.textContent = dummyAnalysisData.volume;
         outputSentiment.textContent = dummyAnalysisData.sentiment;
-        if (detailedAnalysis1) detailedAnalysis1.textContent = dummyAnalysisData.detailedAnalysis[0];
-        if (detailedAnalysis2) detailedAnalysis2.textContent = dummyAnalysisData.detailedAnalysis[1];
-        if (detailedAnalysis3) detailedAnalysis3.textContent = dummyAnalysisData.detailedAnalysis[2];
-        if (detailedAnalysis4) detailedAnalysis4.textContent = dummyAnalysisData.detailedAnalysis[3];
-        if (detailedAnalysis5) detailedAnalysis5.textContent = dummyAnalysisData.detailedAnalysis[4];
 
         if (dummyAnalysisData.action === 'КУПИТЬ' || dummyAnalysisData.action === 'LONG') {
-            outputAction.className = 'font-bold text-green-600';
+            outputAction.className = 'font-bold text-white';
         } else if (dummyAnalysisData.action === 'ПРОДАТЬ' || dummyAnalysisData.action === 'SHORT') {
-            outputAction.className = 'font-bold text-red-600';
+            outputAction.className = 'font-bold text-white';
         } else {
-            outputAction.className = 'font-bold text-gray-400';
+            outputAction.className = 'font-bold text-white';
         }
 
         userPlanLevel = dummyAnalysisData.planLevel;
-        applyPremiumLocks();
 
         showAnalysisResult();
         updateTokenCounter(-1);
@@ -220,7 +303,6 @@ function requestSubscriptionPayment(starsAmount, payloadType) {
                     updateTokenCounter(credits);
                 } else if (payloadType.startsWith('upgrade_plan')) {
                     userPlanLevel = 'premium';
-                    applyPremiumLocks();
                     showCustomMessage('Ваша подписка успешно обновлена до Премиум!');
                 }
             } else {
@@ -234,7 +316,6 @@ function requestSubscriptionPayment(starsAmount, payloadType) {
             updateTokenCounter(credits);
         } else if (payloadType.startsWith('upgrade_plan')) {
             userPlanLevel = 'premium';
-            applyPremiumLocks();
             showCustomMessage('Ваша подписка успешно обновлена до Премиум!');
         }
     }
@@ -248,9 +329,9 @@ function showCustomMessage(message) {
         z-index: 10000;
     `;
     modal.innerHTML = `
-        <div style="background-color: #0F0F1A; padding: 2rem; border-radius: 1rem; text-align: center; max-width: 80%; box-shadow: 0 0 20px rgba(75, 0, 130, 0.5);">
-            <p style="color: #E2E8F0; font-size: 1.1rem; margin-bottom: 1.5rem;">${message}</p>
-            <button onclick="this.parentNode.parentNode.remove()" style="background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%); color: white; padding: 0.75rem 1.5rem; border-radius: 2rem; font-weight: bold; border: none; cursor: pointer;">ОК</button>
+        <div style="background-color: #000; padding: 2rem; border-radius: 1rem; text-align: center; max-width: 80%; box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);">
+            <p style="color: #FFF; font-size: 1.1rem; margin-bottom: 1.5rem;">${message}</p>
+            <button onclick="this.parentNode.parentNode.remove()" style="background-color: #FFF; color: black; padding: 0.75rem 1.5rem; border-radius: 2rem; font-weight: bold; border: none; cursor: pointer;">ОК</button>
         </div>
     `;
     document.body.appendChild(modal);
@@ -320,18 +401,6 @@ function updateSubscriptionPrice() {
     currentSubscriptionPrice.textContent = `$${details.price.toFixed(2)}/${currentSubscriptionType === 'monthly' ? 'месяц' : 'год'}`;
 }
 
-function toggleSubscriptionView(type) {
-    currentSubscriptionType = type;
-    if (type === 'monthly') {
-        monthlyToggle.classList.add('active');
-        yearlyToggle.classList.remove('active');
-    } else {
-        monthlyToggle.classList.remove('active');
-        yearlyToggle.classList.add('active');
-    }
-    updateSubscriptionPrice();
-}
-
 function purchaseCredits() {
     const selectedCredits = creditAmountSelect.value;
     const priceInUSD = creditPrices[selectedCredits];
@@ -353,10 +422,14 @@ function upgradeSubscription() {
 }
 
 function updateTokenCounter(change) {
-    let current = parseInt(headerTokens.textContent);
-    current += change;
-    headerTokens.textContent = current;
-    currentTokens.textContent = current;
+    let currentHeaderTokens = parseInt(headerTokens.textContent);
+    let currentProfileTokens = parseInt(currentTokens.textContent);
+
+    currentHeaderTokens += change;
+    currentProfileTokens += change;
+
+    headerTokens.textContent = currentHeaderTokens;
+    currentTokens.textContent = currentProfileTokens;
 }
 
 function showAnalysisResult() {
@@ -382,50 +455,17 @@ function hideErrorMessage() {
     errorMessage.classList.add('hidden');
 }
 
-function handleCameraClick() {
-    if (typeof Telegram !== 'undefined' && Telegram.WebApp && Telegram.WebApp.isVersionAtLeast('6.9') && Telegram.WebApp.showScanQrPopup) {
-        Telegram.WebApp.showScanQrPopup((data) => {
-            console.log('QR Scanned:', data);
-            showPage('analysisPage');
-            activateNav(document.querySelector('.nav-item[data-page="analysisPage"]'));
-            getAnalysisBtn.click();
-        });
-    } else {
-        showCustomMessage('Функция камеры доступна только в Telegram Web App. Откройте диалог загрузки файла.');
-        showPage('analysisPage');
-        activateNav(document.querySelector('.nav-item[data-page="analysisPage"]'));
-        chartImageUpload.click();
-    }
-}
-
-function applyPremiumLocks() {
-    const detailedAnalysisSection = document.querySelector('.analysis-section-card ul.detailed-analysis-list');
-
-    if (detailedAnalysisSection) {
-        if (userPlanLevel === 'basic') {
-            detailedAnalysisSection.classList.add('locked-content');
-            detailedAnalysisLockOverlay.classList.remove('hidden');
-        } else {
-            detailedAnalysisSection.classList.remove('locked-content');
-            detailedAnalysisLockOverlay.classList.add('hidden');
-        }
-    }
-}
-
-
 document.addEventListener('DOMContentLoaded', () => {
     splashScreen.classList.remove('hidden');
     setTimeout(() => {
         splashScreen.classList.add('hidden');
         showPage('homePage');
-        activateNav(document.querySelector('.nav-item[data-page="analysisPage"]'));
+        activateNav(document.querySelector('.nav-item[data-page="homePage"]'));
     }, 2000);
 
     headerTokens.textContent = '100';
-    currentTokens.textContent = '50';
+    currentTokens.textContent = '100';
     subscriptionEndDate.textContent = '15.08.2025';
     updateCreditPrice();
     updateSubscriptionPrice();
-    toggleSubscriptionView('monthly');
-    applyPremiumLocks();
 });

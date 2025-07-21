@@ -1,20 +1,20 @@
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, #000000, #05050A);
+    background: #000;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
     padding: 1rem;
     box-sizing: border-box;
-    color: #E2E8F0;
+    color: #FFF;
     position: relative;
     padding-bottom: 4.5rem;
 }
 .container {
-    background-color: #0A0A14;
+    background-color: #000;
     border-radius: 1.5rem;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
     padding: 1.5rem;
     width: 100%;
     max-width: 500px;
@@ -40,15 +40,15 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 .btn-primary {
-    background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
+    background-image: linear-gradient(to right, #000 0%, #111 100%);
     color: white;
     padding: 0.85rem 1.75rem;
     border-radius: 2rem;
     font-weight: 700;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(75, 0, 130, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    border: none;
+    border: 1px solid #111;
     outline: none;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -56,25 +56,25 @@ body {
 .btn-primary:hover {
     opacity: 0.95;
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(75, 0, 130, 0.6);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 .btn-secondary {
-    background-color: #1A1A2E;
-    color: #E2E8F0;
+    background-color: #000;
+    color: #FFF;
     padding: 0.75rem 1.5rem;
     border-radius: 0.75rem;
     font-weight: 600;
     transition: all 0.3s ease;
     cursor: pointer;
-    border: none;
+    border: 1px solid #111;
     outline: none;
 }
 .btn-secondary:hover {
-    background-color: #2A2A3A;
+    background-color: #111;
 }
 .loading-spinner {
-    border: 4px solid #3A3A4A;
-    border-top: 4px solid #4B0082;
+    border: 4px solid #111;
+    border-top: 4px solid #FFF;
     border-radius: 50%;
     width: 30px;
     height: 30px;
@@ -86,110 +86,116 @@ body {
     100% { transform: rotate(360deg); }
 }
 .card {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     padding: 1.5rem;
     margin-top: 1rem;
-    border: none;
+    border: 1px solid #111;
 }
 .analysis-item span:first-child {
     font-weight: 600;
-    color: #4B0082;
+    color: #FFF;
 }
 .image-upload-area {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem; /* Восстановлен padding */
-    min-height: 150px;
-    width: 100%;
-    max-width: 200px;
-    margin: 0 auto 0.5rem; /* Отступ для текста ниже */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    padding: 0;
+    height: 400px;
+    width: 400px;
+    margin: 0 auto 0.5rem;
     cursor: pointer;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #1A1A2E;
+    border: 2px dashed #FFF;
     position: relative;
-    overflow: hidden; /* Обрезка содержимого по границам */
+    overflow: hidden;
 }
 .image-upload-area:hover {
-    background-color: #1A1A2E;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    background-color: #111;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
 }
-#uploadImagePlaceholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Картинка заполнит всю область, обрезая лишнее */
-    opacity: 0.2; /* Сделано полупрозрачным */
-    border-radius: 1rem; /* Скругление углов */
+.upload-icon-img {
+    width: 100%; /* Растягивает на всю ширину родительского блока */
+    height: 100%; /* Растягивает на всю высоту родительского блока */
+    object-fit: cover; /* Заполняет блок, сохраняя пропорции */
+    filter: none;
+    opacity: 0.2;
+    border-radius: 1rem;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0; /* Фон, самый нижний слой */
+    z-index: 0;
 }
 .image-preview {
-    max-width: 100%; /* Максимальная ширина */
-    max-height: 180px; /* Максимальная высота */
-    object-fit: contain; /* Чтобы изображение полностью вмещалось, сохраняя пропорции */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: none;
     border-radius: 0.5rem;
     display: none;
-    border: 1px solid #2A2A3A; /* Восстановлена граница для preview */
-    z-index: 1; /* Чтобы превью было поверх плейсхолдера */
-    position: relative; /* Чтобы z-index работал */
+    border: none;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .upload-text {
-    color: #E2E8F0;
+    color: #FFF;
     font-weight: 600;
-    margin-top: 0.5rem;
     text-align: center;
-    display: block;
-    position: relative; /* Чтобы текст был поверх изображений */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
     z-index: 2;
 }
 .subscription-plan {
-    background-color: #0F0F1A;
-    border: 1px solid #2A2A3A;
+    background-color: #000;
+    border: 1px solid #111;
     border-radius: 0.75rem;
     padding: 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 .subscription-plan h3 {
     font-weight: 700;
-    color: #E2E8F0;
+    color: #FFF;
     margin-bottom: 0.5rem;
 }
 .subscription-plan p {
-    color: #CBD5E1;
+    color: #FFF;
     font-size: 0.9rem;
 }
 .payment-info {
     text-align: center;
     padding: 1rem;
-    color: #CBD5E1;
+    color: #FFF;
 }
 .payment-info img {
     max-width: 80px;
     margin: 0 auto 1rem;
 }
-.text-green-600 { color: #00FF00; }
-.text-red-600 { color: #FF0000; }
-.text-blue-600 { color: #4B0082; }
+.text-green-600 { color: #FFF; }
+.text-red-600 { color: #FFF; }
+.text-blue-600 { color: #FFF; }
 .analysis-section-card {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1rem;
     padding: 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border: 1px solid #111;
 }
 .analysis-section-card h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #E2E8F0;
+    color: #FFF;
     margin-bottom: 1rem;
     text-align: center;
 }
@@ -199,37 +205,40 @@ body {
     gap: 1rem;
 }
 .insight-item {
-    background-color: #1A1A2E;
+    background-color: #111;
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    color: #CBD5E1;
+    color: #FFF;
     font-size: 0.9rem;
+    border: 1px solid #111;
 }
 .insight-item .icon {
     font-size: 1.5rem;
-    color: #4B0082;
+    color: #FFF;
+    filter: none;
     margin-bottom: 0.5rem;
 }
 .insight-item .value {
     font-weight: 600;
-    color: #E2E8F0;
+    color: #FFF;
     margin-top: 0.25rem;
 }
 .game-plan-text {
-    color: #CBD5E1;
+    color: #FFF;
     line-height: 1.6;
     font-size: 0.95rem;
 }
 .collapsible-section {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1rem;
     margin-bottom: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    border: 1px solid #111;
 }
 .collapsible-header {
     display: flex;
@@ -238,17 +247,18 @@ body {
     padding: 1rem 1.5rem;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #E2E8F0;
+    color: #FFF;
     cursor: pointer;
-    background-color: #1A1A2E;
-    border-bottom: 1px solid #0F0F1A;
+    background-color: #111;
+    border-bottom: 1px solid #111;
     transition: background-color 0.3s ease;
 }
 .collapsible-header:hover {
-    background-color: #2A2A3A;
+    background-color: #222;
 }
 .collapsible-header .arrow-icon {
     transition: transform 0.3s ease;
+    color: #FFF;
 }
 .collapsible-header.active .arrow-icon {
     transform: rotate(90deg);
@@ -258,7 +268,7 @@ body {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-    color: #CBD5E1;
+    color: #FFF;
     line-height: 1.6;
     font-size: 0.95rem;
 }
@@ -266,17 +276,16 @@ body {
     max-height: 1500px;
     padding: 1.5rem;
 }
-/* Стили для премиум-оверлея */
 .detailed-analysis-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    filter: blur(2px);
-    pointer-events: none;
-    user-select: none;
+    filter: none;
+    pointer-events: auto;
+    user-select: auto;
 }
 .detailed-analysis-list li {
-    background-color: #1A1A2E;
+    background-color: #111;
     border-radius: 0.75rem;
     padding: 1rem;
     margin-bottom: 0.75rem;
@@ -284,10 +293,11 @@ body {
     align-items: center;
     justify-content: space-between;
     font-size: 0.95rem;
-    color: #E2E8F0;
+    color: #FFF;
+    border: 1px solid #111;
 }
 .detailed-analysis-list li .number {
-    background-color: #4B0082;
+    background-color: #333;
     color: white;
     border-radius: 50%;
     width: 28px;
@@ -301,23 +311,19 @@ body {
     flex-shrink: 0;
 }
 .detailed-analysis-list li .lock-icon {
-    margin-left: 0.75rem;
-    color: #9CA3AF;
-    font-size: 1.2rem;
-    flex-shrink: 0;
+    display: none;
 }
 .detailed-analysis-list li .text-content {
     flex-grow: 1;
 }
-
 .lock-overlay {
+    background-color: rgba(0, 0, 0, 0.0);
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -331,36 +337,36 @@ body {
 .lock-overlay .overlay-logo {
     width: 80px;
     height: 80px;
-    filter: drop-shadow(0 0 10px #4B0082) drop-shadow(0 0 10px #8A2BE2);
+    filter: none;
     margin-bottom: 0.5rem;
 }
 .lock-overlay .overlay-text {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #E2E8F0;
+    color: #FFF;
 }
-
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #05050F;
+    background-color: #000;
     display: flex;
     justify-content: space-around;
     align-items: center;
     padding: 0.25rem 0;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.8);
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     z-index: 100;
     height: 4.5rem;
+    border-top: 1px solid #111;
 }
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #CBD5E1;
+    color: #FFF;
     font-size: 0.65rem;
     font-weight: 500;
     padding: 0.25rem;
@@ -368,13 +374,13 @@ body {
     transition: color 0.3s ease;
 }
 .nav-item.active {
-    color: #4B0082;
+    color: #FFF;
 }
 .nav-item:hover {
-    color: #4B0082;
+    color: #FFF;
 }
 .nav-item .nav-icon-circle {
-    background-color: #1A1A2E;
+    background-color: #111;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -384,18 +390,20 @@ body {
     margin-bottom: 0.15rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #111;
 }
 .nav-item.active .nav-icon-circle {
-    background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
-    box-shadow: 0 2px 10px rgba(75, 0, 130, 0.5);
+    background-image: linear-gradient(to right, #111 0%, #222 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
 }
 .nav-item .nav-icon {
     font-size: 1.3rem;
-    color: #E2E8F0;
+    color: #FFF;
+    filter: none;
     transition: color 0.3s ease;
 }
 .nav-item.active .nav-icon {
-    color: white;
+    color: #FFF;
 }
 .loading-modal {
     position: fixed;
@@ -403,7 +411,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.98);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -418,14 +426,15 @@ body {
     visibility: visible;
 }
 .loading-modal-content {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
-    box-shadow: 0 0 20px rgba(75, 0, 130, 0.5);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
     transform: scale(0.8);
     opacity: 0;
     animation: scaleIn 0.3s forwards;
+    border: 1px solid #111;
 }
 @keyframes scaleIn {
     to { transform: scale(1); opacity: 1; }
@@ -433,28 +442,32 @@ body {
 .loading-text {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #4B0082;
+    color: #FFF;
     margin-top: 1rem;
 }
 .loading-spinner-modal {
-    border: 6px solid #3A3A4A;
-    border-top: 6px solid #4B0082;
+    border: 6px solid #111;
+    border-top: 6px solid #FFF;
     border-radius: 50%;
     width: 60px;
     height: 60px;
     animation: spin 1s linear infinite;
 }
 .token-counter {
-    background-color: #0F0F1A;
+    background-color: #111;
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #4B0082;
+    color: #FFF;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    border: 1px solid #111;
+}
+.token-counter span:first-child {
+    filter: none;
 }
 .subscription-options-grid {
     display: grid;
@@ -463,47 +476,53 @@ body {
     margin-top: 1.5rem;
 }
 .subscription-option-card {
-    background-color: #1A1A2E;
-    border: 1px solid #2A2A3A;
+    background-color: #111;
+    border: 1px solid #111;
     border-radius: 0.75rem;
     padding: 1rem;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
 .subscription-option-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
 }
 .subscription-option-card h4 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #E2E8F0;
+    color: #FFF;
     margin-bottom: 0.5rem;
 }
 .subscription-option-card p {
-    color: #CBD5E1;
+    color: #FFF;
     font-size: 0.9rem;
 }
 .subscription-option-card .price {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #4B0082;
+    color: #FFF;
     margin-top: 0.75rem;
 }
 .subscription-option-card .credits {
     font-size: 0.8rem;
-    color: #9CA3AF;
+    color: #FFF;
 }
 .toggle-switch {
     display: flex;
-    background-color: #1A1A2E;
+    background-color: #111;
     border-radius: 1.5rem;
     padding: 0.1rem;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
     width: 140px;
     flex-shrink: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateY(-50%);
+    margin-right: 1.5rem;
+    border: 1px solid #111;
 }
 .toggle-button {
     flex: 1;
@@ -511,19 +530,19 @@ body {
     border-radius: 1.5rem;
     font-size: 0.7rem;
     font-weight: 600;
-    color: #9CA3AF;
+    color: #FFF;
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 .toggle-button.active {
-    background-image: linear-gradient(to right, #4B0082 0%, #8A2BE2 100%);
-    color: white;
-    box-shadow: 0 1px 5px rgba(75, 0, 130, 0.4);
+    background-image: linear-gradient(to right, #111 0%, #222 100%);
+    color: #FFF;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
 .toggle-button .save-badge {
-    background-color: #FF00FF;
-    color: white;
+    background-color: #FFF;
+    color: black;
     font-size: 0.6rem;
     padding: 0.05rem 0.3rem;
     border-radius: 0.5rem;
@@ -531,26 +550,26 @@ body {
     font-weight: 700;
 }
 .credit-select-box {
-    background-color: #2A2A3A;
-    border: 1px solid #3A3A4A;
+    background-color: #111;
+    border: 1px solid #111;
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    color: #E2E8F0;
+    color: #FFF;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     width: 100%;
     margin-top: 0.5rem;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23E2E8F0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 1.5em;
     cursor: pointer;
 }
 .credit-select-box option {
-    background-color: #2A2A3A;
-    color: #E2E8F0;
+    background-color: #111;
+    color: #FFF;
 }
 .subscription-options-container {
     display: flex;
@@ -583,7 +602,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background-color: #000;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -599,15 +618,15 @@ body {
 .splash-logo {
     width: 120px;
     height: 120px;
-    filter: drop-shadow(0 0 10px #4B0082) drop-shadow(0 0 10px #8A2BE2);
+    filter: none;
     animation: pulse 1.5s infinite alternate;
 }
 .splash-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #7B24B3;
+    color: #FFF;
     margin-top: 1rem;
-    text-shadow: 0 0 4px rgba(75, 0, 130, 0.5), 0 0 4px rgba(138, 43, 226, 0.5);
+    text-shadow: none;
 }
 @keyframes pulse {
     from { transform: scale(1); }
@@ -619,40 +638,43 @@ body {
     align-items: center;
     padding: 0.5rem 0;
     margin-bottom: 1rem;
-    border-bottom: 1px solid #1A1A2E;
+    border-bottom: 1px solid #111;
 }
 .app-header .logo-section {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    margin-left: 0.5rem;
 }
 .app-header .logo-img {
     width: 30px;
     height: 30px;
-    filter: drop-shadow(0 0 3px #4B0082) drop-shadow(0 0 3px #8A2BE2);
+    filter: none;
 }
 .app-header .logo-text {
     font-size: 1.1rem;
     font-weight: bold;
-    color: #E2E8F0;
+    color: #FFF;
 }
 .app-header .user-info {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    margin-right: 0.5rem;
 }
 .app-header .user-info .profile-pic {
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: #3A3A4A;
+    background-color: #111;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    color: #E2E8F0;
+    color: #FFF;
     overflow: hidden;
+    border: 1px solid #111;
 }
 .app-header .user-info .profile-pic img {
     width: 100%;
@@ -664,30 +686,31 @@ body {
     font-weight: bold;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #4B0082;
-    text-shadow: 0 0 5px rgba(75, 0, 130, 0.2);
+    color: #FFF;
+    text-shadow: none;
 }
 #homePage .subtitle {
     font-size: 1.1rem;
     text-align: center;
-    color: #CBD5E1;
+    color: #FFF;
     margin-bottom: 2rem;
 }
 #homePage .large-logo-placeholder {
-    background-color: #0F0F1A;
+    background-color: #000;
     border-radius: 1.5rem;
     height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.7);
     position: relative;
+    border: 1px solid #111;
 }
 #homePage .large-logo-placeholder .icon-placeholder {
     font-size: 4rem;
-    color: #4B0082;
-    filter: drop-shadow(0 0 8px #4B0082) drop-shadow(0 0 8px #8A2BE2);
+    color: #FFF;
+    filter: none;
 }
 #homePage .upload-prompt {
     text-align: center;
@@ -695,12 +718,12 @@ body {
 }
 #homePage .upload-prompt p {
     font-size: 1.1rem;
-    color: #E2E8F0;
+    color: #FFF;
     margin-bottom: 0.5rem;
 }
 #homePage .upload-prompt small {
     font-size: 0.85rem;
-    color: #9CA3AF;
+    color: #FFF;
 }
 #homePage .stats-grid {
     display: grid;
@@ -710,20 +733,21 @@ body {
     margin-bottom: 2rem;
 }
 #homePage .stat-item {
-    background-color: #1A1A2E;
+    background-color: #111;
     border-radius: 0.75rem;
     padding: 1rem;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    border: 1px solid #111;
 }
 #homePage .stat-item .value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #4B0082;
+    color: #FFF;
 }
 #homePage .stat-item .label {
     font-size: 0.85rem;
-    color: #CBD5E1;
+    color: #FFF;
     margin-top: 0.25rem;
 }
 .home-features-list {
@@ -734,57 +758,58 @@ body {
     margin-bottom: 2rem;
 }
 .home-feature-item {
-    background-color: #1A1A2E;
-    border-radius: 0.75rem;
-    padding: 1rem 1.5rem;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    color: #E2E8F0;
+    flex-direction: column; /* Изменено с row на column */
+    align-items: center;    /* Центрирует по горизонтали */
+    justify-content: center; /* Центрирует по вертикали, если есть свободное место */
+    gap: 0.5rem;            /* Отступ между иконкой и текстом */
+    color: #FFF;
     font-weight: 600;
     font-size: 1rem;
+    text-align: center;     /* Центрирует текст */
+    margin-bottom: 1rem;    /* Добавьте отступ между элементами */
 }
 .home-feature-item .icon {
     font-size: 1.5rem;
-    color: #4B0082;
+    color: #FFF;
+    filter: none;
 }
 #analysisPage .header-text {
     font-size: 1.8rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #4B0082;
-    text-shadow: 0 0 5px rgba(75, 0, 130, 0.2);
+    color: #FFF;
+    text-shadow: none;
 }
 #analysisPage .subheader-text {
     font-size: 1.1rem;
     text-align: center;
-    color: #CBD5E1;
+    color: #FFF;
     margin-bottom: 2rem;
 }
 #analysisPage .image-upload-area {
-    max-width: 300px;
-    min-height: 200px;
+    max-width: 400px;
+    min-height: 400px;
     margin-bottom: 0.5rem;
-    border: 2px dashed #4B0082;
-    background-color: #0F0F1A;
+    border: 2px dashed #FFF;
+    background-color: #000;
     position: relative;
 }
 #analysisPage .image-upload-area .upload-icon-img {
-     width: 80px;
-     height: 80px;
+    width: 400px;
+    height: 400px;
+    filter: none;
 }
 #analysisPage .image-upload-area .upload-text {
-    color: #E2E8F0;
+    color: #FFF;
     font-weight: 600;
     margin-top: 0.5rem;
-}
-#analysisPage .image-upload-area .image-preview {
-    max-width: 90%;
-    max-height: 180px;
-    object-fit: contain;
-    display: block;
 }
 #analysisPage .analysis-section-card {
     margin-top: 1.5rem;
@@ -793,4 +818,14 @@ body {
 #collapsibleSectionsGroup {
     position: relative;
     padding: 0;
+}
+
+.about-project-title {
+    color: #FFF !important; /* Белый цвет для заголовка, используем !important для переопределения */
+}
+
+.about-project-text {
+    color: #A0A0A0 !important; /* Оттенок серого для текста описания */
+    font-size: 0.95rem; /* Немного уменьшим размер для аккуратности */
+    line-height: 1.6; /* Улучшим читаемость межстрочным интервалом */
 }
