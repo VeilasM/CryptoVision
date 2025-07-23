@@ -6,287 +6,285 @@
     <title>CryptoVision - AI bot</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preload" href="assets/images/logo.png" as="image">
+    <link rel="preload" href="assets/images/upload_icon.png" as="image">
+    <link rel="preload" href="assets/images/home_icon.png" as="image">
+    <link rel="preload" href="assets/images/analysis_icon.png" as="image">
+    <link rel="preload" href="assets/images/chat_icon.png" as="image">
+    <link rel="preload" href="assets/images/search_icon.png" as="image">
+    <link rel="preload" href="assets/images/profile_icon.jpg" as="image">
 </head>
 <body>
-    <div id="splashScreen">
+    <div id="splashScreen" class="splash-screen">
         <img src="assets/images/logo.png" alt="CryptoVision AI Logo" class="splash-logo">
         <div class="splash-title">CryptoVision AI</div>
     </div>
 
-    <div class="container">
-        <div class="app-header">
-            <div class="logo-section" onclick="showPage('homePage'); activateNav(document.querySelector('.nav-item[data-page=\'homePage\']'))">
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-section" onclick="app.showPage('homePage'); app.activateNav(document.querySelector('.nav-item[data-page=\'homePage\']'))">
                 <img src="assets/images/logo.png" alt="CryptoVision AI Logo" class="logo-img">
                 <span class="logo-text">CryptoVisionAI</span>
             </div>
             <div class="user-info">
                 <div class="token-counter" id="tokenCounter">
-                    <span class="text-xs">⭐</span> <span id="headerTokens">100</span>
+                    <span class="text-xs" role="img" aria-label="Star icon">⭐</span> <span id="headerTokens">100</span>
                 </div>
-                <div class="profile-pic">
+                <div class="profile-pic" role="img" aria-label="User profile icon">
                     👤
                 </div>
             </div>
-        </div>
+        </header>
 
-        <div id="homePage" class="page active">
-            <h1 class="main-title">CryptoVision AI</h1>
-            <p class="subtitle">AI-анализ крипто-графиков</p>
-            <p class="text-center text-white mb-6">Автоматический разбор криптографиков</p>
+        <main class="main-content">
+            <section id="homePage" class="page active">
+                <h1 class="main-title">CryptoVision AI</h1>
+                <p class="subtitle">AI-анализ крипто-графиков</p>
+                <p class="text-center text-white mb-6">Автоматический разбор криптографиков</p>
 
-            <div class="analysis-section-card mb-4 flex flex-col items-center">
-                <label for="chartImageUploadHome" class="block text-sm font-medium mb-2 text-white text-center sr-only">Загрузите изображение графика:</label>
-                <div class="image-upload-area" id="imageUploadAreaHome">
-                    <input type="file" id="chartImageUploadHome" accept="image/*" class="hidden">
-                    <img id="imagePreviewHome" class="image-preview" src="#" alt="">
-                    <img id="uploadImagePlaceholderHome" src="assets/images/upload_icon.png" alt="Upload Chart" class="upload-icon-img">
-                    <span id="uploadTextHome" class="upload-text">Нажмите для загрузки</span>
-                </div>
-            </div>
-
-            <button id="uploadAndAnalyzeBtn" class="btn-primary w-full mb-6">
-                <span>Получить анализ</span>
-            </button>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="value">86%</div>
-                    <div class="label">точность</div>
-                </div>
-                <div class="stat-item">
-                    <div class="value">432</div>
-                    <div class="label">анализа сегодня</div>
-                </div>
-            </div>
-
-            <div class="home-features-list">
-                <h2 class="text-xl font-semibold text-center mb-4">Наши Возможности</h2>
-                <div class="home-feature-item">
-                    <img src="assets/images/feature_forecast.png" alt="Прогноз" class="feature-icon">
-                    <span>Прогноз</span>
-                </div>
-                <div class="home-feature-item">
-                    <img src="assets/images/feature_tech_analysis.png" alt="Технический Анализ" class="feature-icon">
-                    <span>Тех. Анализ</span>
-                </div>
-                <div class="home-feature-item">
-                    <img src="assets/images/feature_news_analysis.png" alt="Новостной Анализ" class="feature-icon">
-                    <span>Новостной анализ</span>
-                </div>
-                <div class="home-feature-item">
-                    <img src="assets/images/feature_ai_insights.png" alt="AI Insights" class="feature-icon">
-                    <span>AI Insights</span>
-                </div>
-            </div>
-
-            <div class="card mt-6">
-                <h2 class="text-xl font-semibold text-center mb-4 text-white about-project-title">О ПРОЕКТЕ</h2>
-                <p class="text-gray-400 about-project-text">
-                    CryptoVisionAI — это помощник для трейдеров и инвесторов, который с помощью искусственного интеллекта помогает
-                    быстро анализировать криптографики, выявлять тренды, оценивать новости и
-                    строить прогнозы для принятия решений.
-                </p>
-            </div>
-        </div>
-
-        <div id="analysisPage" class="page">
-            <h2 class="header-text">Нейросетевой криптовалютный инструмент</h2>
-            <p class="subheader-text">Комплексный анализ за мгновение</p>
-
-            <div class="analysis-section-card mb-4 flex flex-col items-center">
-                <label for="chartImageUpload" class="block text-sm font-medium mb-2 text-white text-center sr-only">Загрузите изображение графика:</label>
-                <div class="image-upload-area" id="imageUploadArea">
-                    <input type="file" id="chartImageUpload" accept="image/*" class="hidden">
-                    <img id="imagePreview" class="image-preview" src="#" alt="">
-                    <img id="uploadImagePlaceholder" src="assets/images/upload_icon.png" alt="Upload Chart" class="upload-icon-img">
-                    <span id="uploadText" class="upload-text">Нажмите для загрузки</span>
-                </div>
-            </div>
-
-            <button id="getAnalysisBtn" class="btn-primary w-full flex items-center justify-center mb-6">
-                <span id="buttonText">Получить анализ</span>
-                <div id="loadingSpinner" class="loading-spinner hidden ml-3"></div>
-            </button>
-
-            <div id="analysisResult" class="hidden">
-                <div class="analysis-section-card">
-                    <h2>Ключевые Инсайты</h2>
-                    <div class="key-insight-grid mb-4">
-                        <div class="insight-item">
-                            <span class="icon">📈</span>
-                            <span>Тренд</span>
-                            <span class="value" id="outputTrend">Бычий</span>
-                        </div>
-                        <div class="insight-item">
-                            <span class="icon">📊</span>
-                            <span>Волатильность</span>
-                            <span class="value" id="outputVolatility">Средняя</span>
-                        </div>
-                        <div class="insight-item">
-                            <span>Объем</span>
-                            <span class="value" id="outputVolume">Высокий</span>
-                        </div>
-                        <div class="insight-item">
-                            <span>Настроение рынка</span>
-                            <span class="value" id="outputSentiment">Нейтральное</span>
-                        </div>
-                    </div>
-                    <div class="space-y-2 text-white">
-                        <p class="analysis-item"><span class="text-white">Действие:</span> <span id="outputAction" class="font-bold"></span></p>
-                        <p class="analysis-item"><span class="text-white">Цена входа:</span> <span id="outputEntryPrice"></span></p>
-                        <p class="analysis-item"><span class="text-white">Целевая цена:</span> <span id="outputTargetPrice"></span></p>
-                        <p class="analysis-item"><span class="text-white">Стоп-лосс:</span> <span id="outputStopLoss"></span></p>
-                        <p class="analysis-item"><span class="text-white">Тейк-профит:</span> <span id="outputTakeProfit"></span></p>
-                    </div>
-                    <p id="disclaimerText" class="text-sm text-gray-500 text-center mt-4">Аналитический обзор. Не является индивидуальной инвестиционной рекомендацией.</p>
-                </div>
-
-                <div id="collapsibleSectionsGroup">
-                    <div class="collapsible-section" id="technicalAnalysisContentSection">
-                        <div class="collapsible-header" onclick="toggleCollapsible(this, 'technicalAnalysisContent')">
-                            <span>Технический анализ</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="collapsible-content" id="technicalAnalysisContent">
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mb-1">📊 RSI: 71</p>
-                                <p>Превышает 70 – зона перекупленности, но давление покупателей сохраняется.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">📈 MACD: Бычье пересечение</p>
-                                <p>Линии продолжают расходиться вверх – тренд усиливается.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1"> EMA20: Цена выше EMA</p>
-                                <p>Дневная свеча уверенно закрепилась выше – краткосрочный восходящий импульс.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">〰️ Bollinger Bands: Расширяются вверх</p>
-                                <p>Цена у верхней полосы, подтверждение сильного движения вверх.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">☁️ Ichimoku: Цена над облаком, Chikou выше цены</p>
-                                <p>Все элементы в бычьем положении – мощный ап-тренд.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">📊 Volume: Объёмы растут на росте</p>
-                                <p>Подтверждение спроса – активация покупателей.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">⚡ ADX: 36</p>
-                                <p>Сильный тренд – укрепляется.</p>
-                            </div>
-                            <div class="indicator-item">
-                                <p class="font-bold text-lg mt-4 mb-1">📉 Stochastic: 83</p>
-                                <p>В зоне перекупленности, но разворота пока не наблюдается.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section" id="newsAnalysisContentSection">
-                        <div class="collapsible-header" onclick="toggleCollapsible(this, 'newsAnalysisContent')">
-                            <span>Новостной анализ</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="collapsible-content" id="newsAnalysisContent">
-                            <p class="font-bold text-lg mb-2">Новостной анализ за 14 дней (на 07/2025)</p>
-                            <p>Наблюдается нарастающий оптимизм относительно Bitcoin, что подтверждается множеством новостей об ожидаемом росте его цены и пробоях в ключевых технических уровнях. Анализ говорит о потенциальных новых исторических максимумах, что создает положительное ожидание среди трейдеров. Индикаторы технического анализа, такие как 'Bollinger Bands', указывают на возможность крупных движений вверх. Данные о росте интереса к Bitcoin и наращивании ликвидности также дают основания считать, что актив находится на пути к успешному преодолению ключевых уровней, таких как $110,000. Тем не менее, некоторые аналитики замечают, что время для еще одного параболического роста может быть ограничено, что добавляет элемент осторожности к общему позитивному настрою.</p>
-                            <p class="font-bold text-lg mt-4 mb-2">ВЛИЯНИЕ: Позитивное</p>
-                            <p class="font-bold text-lg mt-4 mb-2">ОЦЕНКА ВЛИЯНИЯ: [🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜] 7/10</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Некоторые из новостей, прошедших аналитическую обработку:</p>
-                            <ul class="list-disc list-inside text-sm">
-                                <li><a href="https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis" target="_blank" class="text-white hover:underline">https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis</a></li>
-                                <li><a href="https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain" target="_blank" class="text-white hover:underline">https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain</a></li>
-                                <li><a href="https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up" target="_blank" class="text-white hover:underline">https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="collapsible-section" id="aboutProjectContentSection">
-                        <div class="collapsible-header" onclick="toggleCollapsible(this, 'aboutProjectContent')">
-                            <span>О ПРОЕКТЕ CRYPTOVISIONAI</span>
-                            <span class="arrow-icon">▶</span>
-                        </div>
-                        <div class="collapsible-content" id="aboutProjectContent">
-                            <p class="font-bold text-lg mb-2">Капитализация: 2366.24 млрд USD (1 место)</p>
-                            <p>Объем (24Ч): 23.07 млрд USD</p>
-                            <p>Ликвидность: 1.0%</p>
-                            <p>FDV: 2366.24 млрд USD</p>
-                            <p class="font-bold text-lg mt-4 mb-2">ATH: $119126.0000</p>
-                            <p>ATL: $67.8100</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Общее предложение: 19.89 млн монет</p>
-                            <p>Максимальное предложение: 21.00 млн монет</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Уровень блокчейна: Layer 1 (L1)</p>
-                            <p>Категория: Optimism Ecosystem</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Дата запуска: 2009-01-03</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Настроение сообщества: [🟩🟩🟩🟩🟩🟩🟩🟩⬜⬜] 86%</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Сайт: <a href="http://www.bitcoin.org" target="_blank" class="text-white hover:underline">http://www.bitcoin.org</a></p>
-                            <p class="font-bold text-lg mt-4 mb-2">Twitter: Открыть</p>
-                            <p class="font-bold text-lg mt-4 mb-2">Reddit: Открыть</p>
+                <div class="analysis-section-card mb-4 flex flex-col items-center">
+                    <label for="chartImageUploadHome" class="sr-only">Загрузите изображение графика:</label>
+                    <div class="glow-wrapper">
+                        <div class="image-upload-area" id="imageUploadAreaHome">
+                            <input type="file" id="chartImageUploadHome" accept="image/*" class="hidden">
+                            <img id="imagePreviewHome" class="image-preview" src="#" alt="Предварительный просмотр загруженного графика">
+                            <img id="uploadImagePlaceholderHome" src="assets/images/upload_icon.png" alt="Иконка загрузки графика" class="upload-icon-img">
                         </div>
                     </div>
                 </div>
 
+                <button id="uploadAndAnalyzeBtn" class="btn-primary w-full mb-6 btn-analysis">
+                    <span>Получить анализ</span>
+                </button>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="value">86%</div>
+                        <div class="label">точность</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="value">432</div>
+                        <div class="label">анализа сегодня</div>
+                    </div>
                 </div>
 
-            <div id="errorMessage" class="hidden bg-red-800 border border-red-600 text-red-200 px-4 py-3 rounded-md mt-4" role="alert">
-                <strong class="font-bold">Ошибка!</strong>
-                <span class="block sm:inline" id="errorText"></span>
-            </div>
-        </div>
+                <div class="home-features-list">
+                    <h2 class="text-xl font-semibold text-center mb-4">Наши Возможности</h2>
+                    <div class="home-feature-item">
+                        <img src="assets/images/feature_forecast.png" alt="Иконка прогноза" class="feature-icon">
+                        <span>Прогноз</span>
+                    </div>
+                    <div class="home-feature-item">
+                        <img src="assets/images/feature_tech_analysis.png" alt="Иконка технического анализа" class="feature-icon">
+                        <span>Тех. Анализ</span>
+                    </div>
+                    <div class="home-feature-item">
+                        <img src="assets/images/feature_news_analysis.png" alt="Иконка новостного анализа" class="feature-icon">
+                        <span>Новостной анализ</span>
+                    </div>
+                    <div class="home-feature-item">
+                        <img src="assets/images/feature_ai_insights.png" alt="Иконка AI инсайтов" class="feature-icon">
+                        <span>AI Insights</span>
+                    </div>
+                </div>
 
-        <div id="instructionModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden">
-            <div class="bg-black rounded-lg p-6 max-w-sm w-full relative">
-                <h2 class="text-xl font-bold text-white mb-4 text-center">Инструкция</h2>
-                <p class="text-white mb-4">
-                    1. Загрузите скриншот графика, который вы хотите проанализировать.<br>
-                    2. Нажмите "Получить анализ".<br>
-                    3. AI предоставит вам ключевые инсайты и план действий.<br>
-                    4. Для детального анализа и расширенных функций рассмотрите Премиум или VIP план.
-                </p>
-                <button class="btn-primary w-full" onclick="hideInstructionModal()">Понятно</button>
-            </div>
+                <div class="card mt-6 about-card">
+                    <h2 class="text-xl font-semibold text-center mb-4 text-white about-project-title">О ПРОЕКТЕ</h2>
+                    <p class="text-gray-400 about-project-text">
+                        CryptoVisionAI — это помощник для трейдеров и инвесторов, который с помощью искусственного интеллекта помогает
+                        быстро анализировать криптографики, выявлять тренды, оценивать новости и
+                        строить прогнозы для принятия решений.
+                    </p>
+                </div>
+            </section>
+
+            <section id="analysisPage" class="page">
+                <h2 class="header-text">Нейросетевой криптовалютный инструмент</h2>
+                <p class="subheader-text">Комплексный анализ за мгновение</p>
+
+                <div class="analysis-section-card mb-4 flex flex-col items-center">
+    <label for="chartImageUpload" class="sr-only">Загрузите изображение графика:</label>
+    <div class="glow-wrapper"> <div class="image-upload-area" id="imageUploadArea">
+            <input type="file" id="chartImageUpload" accept="image/*" class="hidden">
+            <img id="imagePreview" class="image-preview" src="#" alt="Предварительный просмотр загруженного графика">
+            <img id="uploadImagePlaceholder" src="assets/images/upload_icon.png" alt="Иконка загрузки графика" class="upload-icon-img">
         </div>
     </div>
+</div>
 
-    <div id="loadingModal" class="loading-modal">
-        <div class="loading-modal-content">
-            <div class="loading-spinner-modal"></div>
-            <p class="loading-text">AI анализирует график...</p>
+                <button id="getAnalysisBtn" class="btn-primary w-full flex items-center justify-center mb-6 btn-analysis">
+    <span id="buttonText">Получить анализ</span>
+    <div id="loadingSpinner" class="loading-spinner hidden ml-3"></div>
+</button>
+
+                <div id="analysisResult" class="hidden">
+                    <div class="analysis-section-card">
+                        <h2>Ключевые Инсайты</h2>
+                        <div class="key-insight-grid mb-4">
+                            <div class="insight-item">
+                                <span class="icon" role="img" aria-label="Upwards trend emoji">📈</span>
+                                <span>Тренд</span>
+                                <span class="value" id="outputTrend">Бычий</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="icon" role="img" aria-label="Bar chart emoji">📊</span>
+                                <span>Волатильность</span>
+                                <span class="value" id="outputVolatility">Средняя</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="icon" role="img" aria-label="Volume icon">📈</span>
+                                <span>Объем</span>
+                                <span class="value" id="outputVolume">Высокий</span>
+                            </div>
+                            <div class="insight-item">
+                                <span class="icon" role="img" aria-label="Market sentiment icon">😊</span>
+                                <span>Настроение рынка</span>
+                                <span class="value" id="outputSentiment">Нейтральное</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-white">
+                            <p class="analysis-item"><span class="text-white">Действие:</span> <span id="outputAction" class="font-bold"></span></p>
+                            <p class="analysis-item"><span class="text-white">Цена входа:</span> <span id="outputEntryPrice"></span></p>
+                            <p class="analysis-item"><span class="text-white">Целевая цена:</span> <span id="outputTargetPrice"></span></p>
+                            <p class="analysis-item"><span class="text-white">Стоп-лосс:</span> <span id="outputStopLoss"></span></p>
+                            <p class="analysis-item"><span class="text-white">Тейк-профит:</span> <span id="outputTakeProfit"></span></p>
+                        </div>
+                        <p id="disclaimerText" class="text-sm text-gray-500 text-center mt-4 hidden">Аналитический обзор. Не является индивидуальной инвестиционной рекомендацией.</p>
+                    </div>
+
+                    <div id="collapsibleSectionsGroup">
+                        <div class="collapsible-section" id="technicalAnalysisContentSection">
+                            <div class="collapsible-header" onclick="app.toggleCollapsible(this, 'technicalAnalysisContent')">
+                                <span>Технический анализ</span>
+                                <span class="arrow-icon">▶</span>
+                            </div>
+                            <div class="collapsible-content" id="technicalAnalysisContent">
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mb-1">📊 RSI: 71</p>
+                                    <p>Превышает 70 – зона перекупленности, но давление покупателей сохраняется.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">📈 MACD: Бычье пересечение</p>
+                                    <p>Линии продолжают расходиться вверх – тренд усиливается.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1"> EMA20: Цена выше EMA</p>
+                                    <p>Дневная свеча уверенно закрепилась выше – краткосрочный восходящий импульс.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">〰️ Bollinger Bands: Расширяются вверх</p>
+                                    <p>Цена у верхней полосы, подтверждение сильного движения вверх.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">☁️ Ichimoku: Цена над облаком, Chikou выше цены</p>
+                                    <p>Все элементы в бычьем положении – мощный ап-тренд.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">📊 Volume: Объёмы растут на росте</p>
+                                    <p>Подтверждение спроса – активация покупателей.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">⚡ ADX: 36</p>
+                                    <p>Сильный тренд – укрепляется.</p>
+                                </div>
+                                <div class="indicator-item">
+                                    <p class="font-bold text-lg mt-4 mb-1">📉 Stochastic: 83</p>
+                                    <p>В зоне перекупленности, но разворота пока не наблюдается.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="collapsible-section" id="newsAnalysisContentSection">
+                            <div class="collapsible-header" onclick="app.toggleCollapsible(this, 'newsAnalysisContent')">
+                                <span>Новостной анализ</span>
+                                <span class="arrow-icon">▶</span>
+                            </div>
+                            <div class="collapsible-content" id="newsAnalysisContent">
+                                <p class="font-bold text-lg mb-2">Новостной анализ за 14 дней (на 07/2025)</p>
+                                <p>Наблюдается нарастающий оптимизм относительно Bitcoin, что подтверждается множеством новостей об ожидаемом росте его цены и пробоях в ключевых технических уровнях. Анализ говорит о потенциальных новых исторических максимумах, что создает положительное ожидание среди трейдеров. Индикаторы технического анализа, такие как 'Bollinger Bands', указывают на возможность крупных движений вверх. Данные о росте интереса к Bitcoin и наращивании ликвидности также дают основания считать, что актив находится на пути к успешному преодолению ключевых уровней, таких как $110,000. Тем не менее, некоторые аналитики замечают, что время для еще одного параболического роста может быть ограничено, что добавляет элемент осторожности к общему позитивному настрою.</p>
+                                <p class="font-bold text-lg mt-4 mb-2">ВЛИЯНИЕ: Позитивное</p>
+                                <p class="font-bold text-lg mt-4 mb-2">ОЦЕНКА ВЛИЯНИЯ: [🟩🟩🟩🟩🟩🟩🟩⬜⬜⬜] 7/10</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Некоторые из новостей, прошедших аналитическую обработку:</p>
+                                <ul class="list-disc list-inside text-sm">
+                                    <li><a href="https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis" target="_blank" class="text-white hover:underline">https://www.coindesk.com/markets/2025/07/02/bitcoin-bulls-should-be-wary-as-dollar-index-chart-flashes-death-cross-technical-analysis</a></li>
+                                    <li><a href="https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain" target="_blank" class="text-white hover:underline">https://cointelegraph.com/news/bitcoin-cup-and-handle-breakout-230k-target-sol-2800-gain</a></li>
+                                    <li><a href="https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up" target="_blank" class="text-white hover:underline">https://cointelegraph.com/news/bitcoin-test-110k-macro-analysis-tells-traders-buckle-up</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="collapsible-section" id="aboutProjectContentSection">
+                            <div class="collapsible-header" onclick="app.toggleCollapsible(this, 'aboutProjectContent')">
+                                <span>О ПРОЕКТЕ CRYPTOVISIONAI</span>
+                                <span class="arrow-icon">▶</span>
+                            </div>
+                            <div class="collapsible-content" id="aboutProjectContent">
+                                <p class="font-bold text-lg mb-2">Капитализация: 2366.24 млрд USD (1 место)</p>
+                                <p>Объем (24Ч): 23.07 млрд USD</p>
+                                <p>Ликвидность: 1.0%</p>
+                                <p>FDV: 2366.24 млрд USD</p>
+                                <p class="font-bold text-lg mt-4 mb-2">ATH: $119126.0000</p>
+                                <p>ATL: $67.8100</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Общее предложение: 19.89 млн монет</p>
+                                <p>Максимальное предложение: 21.00 млн монет</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Уровень блокчейна: Layer 1 (L1)</p>
+                                <p>Категория: Optimism Ecosystem</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Дата запуска: 2009-01-03</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Сайт: <a href="http://www.bitcoin.org" target="_blank" class="text-white hover:underline">http://www.bitcoin.org</a></p>
+                                <p class="font-bold text-lg mt-4 mb-2">Twitter: Открыть</p>
+                                <p class="font-bold text-lg mt-4 mb-2">Reddit: Открыть</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="errorMessage" class="error-message hidden" role="alert">
+                    <strong class="font-bold">Ошибка!</strong>
+                    <span class="block sm:inline" id="errorText"></span>
+                </div>
+            </section>
+
+            </main>
+
+        <div id="loadingModal" class="loading-modal">
+            <div class="loading-modal-content">
+                <div class="loading-spinner-modal"></div>
+                <p class="loading-text">AI анализирует график...</p>
+            </div>
         </div>
+
+        <nav class="bottom-nav">
+    <div class="nav-item" data-page="homePage" onclick="app.showPage('homePage'); app.activateNav(this)">
+        <div class="nav-icon-circle">
+            <img src="assets/images/home_icon.png" alt="Главная" class="nav-icon">
+        </div>
+        <span>Главная</span>
     </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item" data-page="homePage" onclick="showPage('homePage'); activateNav(this)">
-            <div class="nav-icon-circle">
-                <img src="assets/images/home_icon.png" alt="Главная" class="nav-icon">
-            </div>
-            <span>Главная</span>
+    <div class="nav-item" data-page="searchPage" onclick="app.showPage('searchPage'); app.activateNav(this)">
+        <div class="nav-icon-circle">
+            <img src="assets/images/search_icon.png" alt="Поиск" class="nav-icon">
         </div>
-        <div class="nav-item" data-page="analysisPage" onclick="showPage('analysisPage'); activateNav(this)">
-            <div class="nav-icon-circle">
-                <img src="assets/images/analysis_icon.png" alt="AI Анализ" class="nav-icon">
-            </div>
-            <span>AI Анализ</span>
+        <span>Поиск</span>
+    </div>
+    <div class="nav-item" data-page="chatPage" onclick="app.showPage('chatPage'); app.activateNav(this)">
+        <div class="nav-icon-circle">
+            <img src="assets/images/chat_icon.png" alt="AI Чат" class="nav-icon">
         </div>
-        <div class="nav-item" data-page="chatPage" onclick="showPage('chatPage'); activateNav(this)">
-            <div class="nav-icon-circle">
-                <img src="assets/images/chat_icon.png" alt="AI Чат" class="nav-icon">
-            </div>
-            <span>AI Чат</span>
+        <span>AI Чат</span>
+    </div>
+    <div class="nav-item" data-page="coursePage" onclick="app.showPage('coursePage'); app.activateNav(this)">
+        <div class="nav-icon-circle">
+            <img src="assets/images/course_icon.png" alt="Курс" class="nav-icon">
         </div>
-        <div class="nav-item" data-page="searchPage" onclick="showPage('searchPage'); activateNav(this)">
-            <div class="nav-icon-circle">
-                <img src="assets/images/search_icon.png" alt="Поиск" class="nav-icon">
-            </div>
-            <span>Поиск</span>
+        <span>Курс</span>
+    </div>
+    <div class="nav-item" data-page="profilePage" onclick="app.showPage('profilePage'); app.activateNav(this)">
+        <div class="nav-icon-circle">
+            <img src="assets/images/profile_icon.jpg" alt="Профиль" class="nav-icon">
         </div>
-        <div class="nav-item" data-page="profilePage" onclick="showPage('profilePage'); activateNav(this)">
-            <div class="nav-icon-circle">
-                <img src="assets/images/profile_icon.png" alt="Профиль" class="nav-icon">
-            </div>
-            <span>Профиль</span>
-        </div>
+        <span>Профиль</span>
+    </div>
+</nav>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>

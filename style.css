@@ -1,148 +1,319 @@
+/* style.css */
+
+/* CSS Variables for better maintainability */
+:root {
+    --primary-bg-color: #000;
+    --secondary-bg-color: #111;
+    --text-color: #FFF;
+    --accent-color: #00ffff; /* Пример акцентного цвета */
+    --border-color: #111;
+    --header-height: 5.5rem;
+    --bottom-nav-height: 5.5rem;
+    --modal-z-index: 1010;
+    --splash-z-index: 2000;
+    --header-z-index: 1000;
+}
+
+/* Base styles and container */
 body {
     font-family: 'Inter', sans-serif;
-    background: #000;
+    background: var(--primary-bg-color);
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-start; /* Начало контента сверху */
     min-height: 100vh;
     padding: 1rem;
     box-sizing: border-box;
-    color: #FFF;
+    color: var(--text-color);
     position: relative;
-    padding-bottom: 4.5rem;
+    padding-bottom: var(--bottom-nav-height); /* Отступ для фиксированной нижней навигации */
 }
-.container {
-    background-color: #000;
+
+.app-container {
+    background-color: var(--primary-bg-color);
     border-radius: 1.5rem;
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
     padding: 1.5rem;
     width: 100%;
-    max-width: 500px;
+    max-width: 500px; /* Ограничение ширины для мобильного вида */
     box-sizing: border-box;
     min-height: 70vh;
     display: flex;
     flex-direction: column;
     position: relative;
 }
-.page {
-    display: none;
+
+/* Header styles */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky; /* Фиксированный заголовок при скролле */
+    top: 0;
+    background-color: var(--primary-bg-color);
+    z-index: var(--header-z-index); /* Слой выше основного контента */
+}
+
+.app-header .logo-section {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.app-header .logo-img {
+    width: 30px;
+    height: 30px;
+    filter: none; /* Убираем любые фильтры, чтобы не конфликтовать */
+}
+
+.app-header .logo-text {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.app-header .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-right: 0.5rem;
+}
+
+.app-header .user-info .profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--secondary-bg-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    overflow: hidden;
+    border: none;
+}
+
+.token-counter {
+    background-color: var(--secondary-bg-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    border: none;
+}
+
+/* Main content area */
+.main-content {
     flex-grow: 1;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    animation: fadeIn 0.5s ease-out;
 }
+
+.page {
+    display: none;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
 .page.active {
     display: flex;
-    flex-direction: column;
+    /* animation: fadeIn 0.5s ease-out; */ /* Анимации были закомментированы, можно включить */
 }
-@keyframes fadeIn {
+
+/* @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-}
+} */
+
+/* Primary Button */
 .btn-primary {
-    background-image: linear-gradient(to right, #000 0%, #111 100%);
-    color: white;
+    background-image: linear-gradient(to right, var(--primary-bg-color) 0%, var(--secondary-bg-color) 100%);
+    color: var(--text-color);
     padding: 0.85rem 1.75rem;
     border-radius: 2rem;
     font-weight: 700;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* Добавлено для плавного ховера */
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     cursor: pointer;
-    border: 1px solid #111;
+    border: none;
     outline: none;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
 .btn-primary:hover {
     opacity: 0.95;
-    transform: translateY(-3px);
+    transform: translateY(-3px); /* Эффект подъема при ховере */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
+.btn-analysis {
+    background-image: none; /* Убираем градиент */
+    background-color: var(--text-color); /* Делаем фон белым */
+    color: var(--primary-bg-color); /* Текст делаем чёрным, чтобы он был виден на белом фоне */
+}
+
+.btn-analysis:hover {
+    background-color: #e0e0e0; /* Более темный оттенок белого при наведении */
+    transform: translateY(-2px); /* Небольшой эффект при ховере */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Обновлённая тень */
+}
+
+/* Secondary Button */
 .btn-secondary {
-    background-color: #000;
-    color: #FFF;
+    background-color: var(--primary-bg-color);
+    color: var(--text-color);
     padding: 0.75rem 1.5rem;
     border-radius: 0.75rem;
     font-weight: 600;
-    transition: all 0.3s ease;
     cursor: pointer;
-    border: 1px solid #111;
+    border: none;
     outline: none;
 }
-.btn-secondary:hover {
-    background-color: #111;
-}
+
+/* Loading Spinner */
 .loading-spinner {
-    border: 4px solid #111;
-    border-top: 4px solid #FFF;
+    border: 4px solid var(--secondary-bg-color);
+    border-top: 4px solid var(--text-color);
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    animation: spin 1s linear infinite;
+    animation: spin 1s linear infinite; /* Анимация вращения */
     margin: 1rem auto;
 }
-@keyframes spin {
+
+/* @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
+} */
+
+/* Card styles */
 .card {
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     border-radius: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     padding: 1.5rem;
     margin-top: 1rem;
-    border: 1px solid #111;
+    border: 1px solid var(--border-color);
     position: relative;
 }
+
+.about-card {
+    border: none; /* Убираем границу для конкретной карточки */
+}
+
 .analysis-item span:first-child {
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
 }
-.image-upload-area {
-    background-color: #000;
-    border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    padding: 0;
-    height: 200px;
-    width: 200px;
-    margin: 0 auto 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: 2px dashed #FFF;
+
+/* Image Upload Area with Glow */
+.glow-wrapper {
     position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 0.5rem;
+    border-radius: 1.5rem;
+    overflow: visible;
+    z-index: 0;
+}
+
+.glow-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -8px; /* Уменьшено */
+    left: -8px; /* Уменьшено */
+    right: -8px; /* Уменьшено */
+    bottom: -8px; /* Уменьшено */
+    border-radius: 2rem;
+    z-index: -1;
+    background: conic-gradient(
+        from 180deg,
+        #00ffff,
+        #007fff,
+        #6a0dad,
+        #ff1493,
+        #ff4500,
+        #ffd700,
+        #00ffff
+    );
+    filter: blur(20px); /* Можно также уменьшить blur для менее сильного свечения */
+    opacity: 1;
+    animation: rotateGlow 8s linear infinite;
+}
+
+.image-upload-area {
+    width: 100%;
+    height: 100%;
+    border-radius: 1.5rem;
     overflow: hidden;
+    background-color: var(--primary-bg-color);
+    position: relative;
+    z-index: 1; /* Поверх свечения */
+    display: flex; /* Центрирование содержимого */
+    align-items: center;
+    justify-content: center;
 }
-.image-upload-area:hover {
-    background-color: #111;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-}
-.upload-icon-img {
-    width: 100%; /* Растягивает на всю ширину родительского блока */
-    height: 100%; /* Растягивает на всю высоту родительского блока */
-    object-fit: cover; /* Заполняет блок, сохраняя пропорции */
+
+.image-upload-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1.5rem;
+    z-index: 2; /* Поверх плейсхолдера */
+    position: absolute;
+    top: 0;
+    left: 0;
     filter: none;
-    opacity: 0.2;
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.upload-icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: none;
+    opacity: 0.6;
     border-radius: 1rem;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0;
+    z-index: 0; /* Под изображением-превью и текстом */
 }
+
 .image-preview {
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: none;
     border-radius: 0.5rem;
-    display: none;
+    display: none; /* Скрыто по умолчанию, управляется JS */
     border: none;
     z-index: 1;
     position: absolute;
     top: 0;
     left: 0;
 }
+
+.image-preview.is-active {
+    display: block; /* Показывается, когда изображение загружено */
+}
+
 .upload-text {
-    color: #FFF;
+    color: var(--text-color);
     font-weight: 600;
     text-align: center;
     position: absolute;
@@ -153,94 +324,120 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    pointer-events: none;
+    pointer-events: none; /* Пропускает клики на область загрузки */
     z-index: 2;
 }
+
+.upload-text.is-hidden {
+    display: none; /* Скрывается при загрузке изображения */
+}
+
+.upload-icon-img.is-hidden {
+    display: none; /* Скрывается при загрузке изображения */
+}
+
+/* Subscription plans */
 .subscription-plan {
-    background-color: #000;
-    border: 1px solid #111;
+    background-color: var(--primary-bg-color);
+    border: none;
     border-radius: 0.75rem;
     padding: 1rem;
     margin-bottom: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
+
 .subscription-plan h3 {
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
+
 .subscription-plan p {
-    color: #FFF;
+    color: var(--text-color);
     font-size: 0.9rem;
 }
+
 .payment-info {
     text-align: center;
     padding: 1rem;
-    color: #FFF;
+    color: var(--text-color);
 }
+
 .payment-info img {
     max-width: 80px;
     margin: 0 auto 1rem;
 }
-.text-green-600 { color: #FFF; }
-.text-red-600 { color: #FFF; }
-.text-blue-600 { color: #FFF; }
+
+/* Corrected Tailwind color overrides for specific use cases */
+/* Использовать эти классы напрямую в HTML для изменения цвета текста */
+.text-green-500 { color: #22c55e; }
+.text-red-500 { color: #ef4444; }
+
 .analysis-section-card {
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     border-radius: 1rem;
     padding: 1.5rem;
     margin-bottom: 1rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border: 1px solid #111;
+    border: none;
 }
+
 .analysis-section-card h2 {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-color);
     margin-bottom: 1rem;
     text-align: center;
 }
+
 .key-insight-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
+
 .insight-item {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     border-radius: 0.75rem;
     padding: 0.75rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    color: #FFF;
+    color: var(--text-color);
     font-size: 0.9rem;
-    border: 1px solid #111;
+    border: none;
 }
+
 .insight-item .icon {
     font-size: 1.5rem;
-    color: #FFF;
+    color: var(--text-color);
     filter: none;
     margin-bottom: 0.5rem;
 }
+
 .insight-item .value {
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
     margin-top: 0.25rem;
 }
+
 .game-plan-text {
-    color: #FFF;
+    color: var(--text-color);
     line-height: 1.6;
     font-size: 0.95rem;
 }
+
+/* Collapsible sections */
 .collapsible-section {
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     border-radius: 1rem;
     margin-bottom: 1rem;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    border: 1px solid #111;
+    border: none;
 }
+
 .collapsible-header {
     display: flex;
     justify-content: space-between;
@@ -248,45 +445,49 @@ body {
     padding: 1rem 1.5rem;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
     cursor: pointer;
-    background-color: #111;
-    border-bottom: 1px solid #111;
+    background-color: var(--secondary-bg-color);
+    border-bottom: 1px solid var(--border-color);
     transition: background-color 0.3s ease;
 }
+
 .collapsible-header:hover {
-    background-color: #222;
+    background-color: #222; /* Эффект ховера */
 }
+
 .collapsible-header .arrow-icon {
     transition: transform 0.3s ease;
-    color: #FFF;
+    color: var(--text-color);
 }
+
 .collapsible-header.active .arrow-icon {
     transform: rotate(90deg);
 }
+
 .collapsible-content {
     padding: 0 1.5rem;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-    color: #FFF;
+    color: var(--text-color);
     line-height: 1.6;
     font-size: 0.95rem;
 }
+
 .collapsible-content.active {
     max-height: 1500px;
     padding: 1.5rem;
 }
+
 .detailed-analysis-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    filter: none;
-    pointer-events: auto;
-    user-select: auto;
 }
+
 .detailed-analysis-list li {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     border-radius: 0.75rem;
     padding: 1rem;
     margin-bottom: 0.75rem;
@@ -294,12 +495,13 @@ body {
     align-items: center;
     justify-content: space-between;
     font-size: 0.95rem;
-    color: #FFF;
-    border: 1px solid #111;
+    color: var(--text-color);
+    border: none;
 }
+
 .detailed-analysis-list li .number {
     background-color: #333;
-    color: white;
+    color: var(--text-color);
     border-radius: 50%;
     width: 28px;
     height: 28px;
@@ -311,12 +513,7 @@ body {
     margin-right: 0.75rem;
     flex-shrink: 0;
 }
-.detailed-analysis-list li .lock-icon {
-    display: none;
-}
-.detailed-analysis-list li .text-content {
-    flex-grow: 1;
-}
+
 .lock-overlay {
     background-color: rgba(0, 0, 0, 0.0);
     display: none;
@@ -328,30 +525,34 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-color);
     font-size: 1.5rem;
     font-weight: bold;
     border-radius: 1rem;
-    z-index: 10;
+    z-index: 100; /* Более высокий z-index для overlay */
     text-align: center;
 }
+
 .lock-overlay .overlay-logo {
     width: 80px;
     height: 80px;
     filter: none;
     margin-bottom: 0.5rem;
 }
+
 .lock-overlay .overlay-text {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #FFF;
+    color: var(--text-color);
 }
+
+/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -359,55 +560,65 @@ body {
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.8);
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
-    z-index: 100;
-    height: 4.5rem;
-    border-top: 1px solid #111;
+    z-index: 9999; /* Самый высокий z-index для навигации */
+    height: var(--bottom-nav-height);
+    border-top: 1px solid var(--border-color);
+    pointer-events: auto;
 }
+
 .nav-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #FFF;
+    color: var(--text-color);
     font-size: 0.65rem;
     font-weight: 500;
     padding: 0.25rem;
     cursor: pointer;
     transition: color 0.3s ease;
 }
+
 .nav-item.active {
-    color: #FFF;
+    color: var(--text-color);
 }
+
 .nav-item:hover {
-    color: #FFF;
+    color: #AAA; /* Небольшое изменение цвета при ховере */
 }
+
 .nav-item .nav-icon-circle {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 0.15rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #111;
+    border: none;
 }
-.nav-item.active .nav-icon-circle {
-    background-image: linear-gradient(to right, #111 0%, #222 100%);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+
+.nav-item:hover .nav-icon-circle {
+    background-color: #222;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
+
 .nav-item .nav-icon {
     font-size: 1.3rem;
-    color: #FFF;
+    color: var(--text-color);
     filter: none;
     transition: color 0.3s ease;
-    width: 24px; /* Добавлено: установить фиксированную ширину для иконок */
-    height: 24px; /* Добавлено: установить фиксированную высоту для иконок */
+    width: 24px;
+    height: 24px;
 }
+
 .nav-item.active .nav-icon {
-    color: #FFF;
+    color: var(--text-color);
 }
+
+/* Loading Modal */
 .loading-modal {
     position: fixed;
     top: 0;
@@ -419,17 +630,19 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: var(--modal-z-index); /* Выше обычной навигации */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
 .loading-modal.active {
     opacity: 1;
     visibility: visible;
 }
+
 .loading-modal-content {
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     border-radius: 1rem;
     padding: 2rem;
     text-align: center;
@@ -437,50 +650,59 @@ body {
     transform: scale(0.8);
     opacity: 0;
     animation: scaleIn 0.3s forwards;
-    border: 1px solid #111;
+    border: none;
 }
+
 @keyframes scaleIn {
     to { transform: scale(1); opacity: 1; }
 }
+
 .loading-text {
     font-size: 1.2rem;
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
     margin-top: 1rem;
 }
+
 .loading-spinner-modal {
-    border: 6px solid #111;
-    border-top: 6px solid #FFF;
+    border: none;
+    border-top: 6px solid var(--text-color);
     border-radius: 50%;
     width: 60px;
     height: 60px;
     animation: spin 1s linear infinite;
 }
+
+/* Token counter styles */
 .token-counter {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     padding: 0.5rem 0.75rem;
     border-radius: 0.5rem;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    border: 1px solid #111;
+    border: none;
 }
+
 .token-counter span:first-child {
     filter: none;
 }
+
+/* Subscription options */
 .subscription-options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
     margin-top: 1.5rem;
 }
+
 .subscription-option-card {
-    background-color: #111;
-    border: 1px solid #111;
+    background-color: var(--secondary-bg-color);
+    border: none;
     border-radius: 0.75rem;
     padding: 1rem;
     text-align: center;
@@ -488,61 +710,71 @@ body {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
 }
+
 .subscription-option-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
+
 .subscription-option-card h4 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-color);
     margin-bottom: 0.5rem;
 }
+
 .subscription-option-card p {
-    color: #FFF;
+    color: var(--text-color);
     font-size: 0.9rem;
 }
+
 .subscription-option-card .price {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #FFF;
+    color: var(--text-color);
     margin-top: 0.75rem;
 }
+
 .subscription-option-card .credits {
     font-size: 0.8rem;
-    color: #FFF;
+    color: var(--text-color);
 }
+
 .toggle-switch {
     display: flex;
-    background-color: #111;
+    background-color: #999;
     border-radius: 1.5rem;
     padding: 0.1rem;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
-    width: 140px;
+    width: 80px;
     flex-shrink: 0;
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    border: 1px solid #111;
+    top: -1.5rem !important;
+    right: -1rem !important;
+    border: 1px solid var(--border-color);
+    z-index: 2;
+    pointer-events: auto;
 }
+
 .toggle-button {
     flex: 1;
-    padding: 0.5rem 0.5rem;
+    padding: 0.1rem 0.1rem;
     border-radius: 1.5rem;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 600;
-    color: #FFF;
+    color: var(--text-color);
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
 .toggle-button.active {
-    background-image: linear-gradient(to right, #111 0%, #222 100%);
-    color: #FFF;
+    background-image: linear-gradient(to right, var(--secondary-bg-color) 0%, #222 100%);
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
+
 .toggle-button .save-badge {
-    background-color: #FFF;
+    background-color: var(--text-color);
     color: black;
     font-size: 0.6rem;
     padding: 0.05rem 0.3rem;
@@ -550,13 +782,14 @@ body {
     margin-left: 0.3rem;
     font-weight: 700;
 }
+
 .credit-select-box {
-    background-color: #111;
-    border: 1px solid #111;
+    background-color: var(--secondary-bg-color);
+    border: none;
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
     font-size: 1rem;
-    color: #FFF;
+    color: var(--text-color);
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -568,15 +801,18 @@ body {
     background-size: 1.5em;
     cursor: pointer;
 }
+
 .credit-select-box option {
-    background-color: #111;
-    color: #FFF;
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
 }
+
 .subscription-options-container {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
+
 @media (min-width: 640px) {
     .subscription-options-container {
         flex-direction: row;
@@ -586,146 +822,80 @@ body {
         margin-top: 0;
     }
 }
+
 .subscription-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
 }
+
 .subscription-header-row h3 {
     margin-bottom: 0;
     text-align: center;
     flex-grow: 1;
 }
-#splashScreen {
+
+/* Splash Screen */
+.splash-screen {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: var(--splash-z-index);
     opacity: 1;
-    transition: opacity 0.5s ease-out;
+    visibility: visible;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
 }
-#splashScreen.hidden {
+
+.splash-screen.hidden {
     opacity: 0;
     visibility: hidden;
 }
+
 .splash-logo {
     width: 120px;
     height: 120px;
     filter: none;
     animation: pulse 1.5s infinite alternate;
 }
+
 .splash-title {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #FFF;
+    color: var(--text-color);
     margin-top: 1rem;
     text-shadow: none;
 }
+
 @keyframes pulse {
     from { transform: scale(1); }
     to { transform: scale(1.05); }
 }
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #111;
-}
-.app-header .logo-section {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    margin-left: 0.5rem;
-}
-.app-header .logo-img {
-    width: 30px;
-    height: 30px;
-    filter: none;
-}
-.app-header .logo-text {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #FFF;
-}
-.app-header .user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-right: 0.5rem;
-}
-.app-header .user-info .profile-pic {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #111;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    color: #FFF;
-    overflow: hidden;
-    border: 1px solid #111;
-}
-.app-header .user-info .profile-pic img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+
+/* Home Page specific styles */
 #homePage .main-title {
     font-size: 1.8rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #FFF;
+    color: var(--text-color);
     text-shadow: none;
 }
+
 #homePage .subtitle {
     font-size: 1.1rem;
     text-align: center;
-    color: #FFF;
+    color: var(--text-color);
     margin-bottom: 2rem;
 }
-#homePage .large-logo-placeholder {
-    background-color: #000;
-    border-radius: 1.5rem;
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.7);
-    position: relative;
-    border: 1px solid #111;
-}
-#homePage .large-logo-placeholder .icon-placeholder {
-    font-size: 4rem;
-    color: #FFF;
-    filter: none;
-}
-#homePage .upload-prompt {
-    text-align: center;
-    margin-bottom: 1.5rem;
-}
-#homePage .upload-prompt p {
-    font-size: 1.1rem;
-    color: #FFF;
-    margin-bottom: 0.5rem;
-}
-#homePage .upload-prompt small {
-    font-size: 0.85rem;
-    color: #FFF;
-}
+
 #homePage .stats-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -733,31 +903,36 @@ body {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
 #homePage .stat-item {
-    background-color: #111;
+    background-color: var(--secondary-bg-color);
     border-radius: 0.75rem;
     padding: 1rem;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    border: 1px solid #111;
+    border: none;
 }
+
 #homePage .stat-item .value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #FFF;
+    color: var(--text-color);
 }
+
 #homePage .stat-item .label {
     font-size: 0.85rem;
-    color: #FFF;
+    color: var(--text-color);
     margin-top: 0.25rem;
 }
+
 .home-features-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Изменено на столбец */
     gap: 0.75rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
+
 .home-feature-item {
     background-color: transparent;
     border: none;
@@ -765,53 +940,60 @@ body {
     border-radius: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Изменено с row на column */
-    align-items: center;    /* Центрирует по горизонтали */
-    justify-content: center; /* Центрирует по вертикали, если есть свободное место */
-    gap: 0.5rem;            /* Отступ между иконкой и текстом */
-    color: #FFF;
+    flex-direction: column; /* Изменено на столбец */
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-color);
     font-weight: 600;
     font-size: 1rem;
-    text-align: center;     /* Центрирует текст */
-    margin-bottom: 1rem;    /* Добавьте отступ между элементами */
+    text-align: center;
+    margin-bottom: 1rem;
 }
+
 .home-feature-item .icon {
     font-size: 1.5rem;
-    color: #FFF;
+    color: var(--text-color);
     filter: none;
 }
+
+/* Analysis Page specific styles */
 #analysisPage .header-text {
     font-size: 1.8rem;
     font-weight: bold;
     text-align: center;
     margin-bottom: 0.5rem;
-    color: #FFF;
+    color: var(--text-color);
     text-shadow: none;
 }
+
 #analysisPage .subheader-text {
     font-size: 1.1rem;
     text-align: center;
-    color: #FFF;
+    color: var(--text-color);
     margin-bottom: 2rem;
 }
+
 #analysisPage .image-upload-area {
     max-width: 200px;
     min-height: 200px;
     margin-bottom: 0.5rem;
-    border: 2px dashed #FFF;
-    background-color: #000;
+    background-color: var(--primary-bg-color);
     position: relative;
 }
+
 #analysisPage .image-upload-area .upload-icon-img {
     width: 200px;
     height: 200px;
     filter: none;
 }
+
 #analysisPage .image-upload-area .upload-text {
-    color: #FFF;
+    color: var(--text-color);
     font-weight: 600;
     margin-top: 0.5rem;
 }
+
 #analysisPage .analysis-section-card {
     margin-top: 1.5rem;
 }
@@ -822,22 +1004,104 @@ body {
 }
 
 .about-project-title {
-    color: #FFF !important; /* Белый цвет для заголовка, используем !important для переопределения */
+    color: var(--text-color) !important;
 }
 
 .about-project-text {
-    color: #A0A0A0 !important; /* Оттенок серого для текста описания */
-    font-size: 0.95rem; /* Немного уменьшим размер для аккуратности */
-    line-height: 1.6; /* Улучшим читаемость межстрочным интервалом */
+    color: #A0A0A0 !important;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
-/* Изменения для заголовков в секции профиля */
 #payAsYouGoSection h3 {
-    margin-top: 0.5rem; /* Отступ сверху */
-    margin-bottom: 1rem; /* Увеличим отступ снизу */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 #subscriptionSection h3 {
-    margin-top: 0.5rem; /* Отступ сверху */
-    margin-bottom: 1rem; /* Увеличим отступ снизу */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: var(--modal-z-index); /* Выше обычной навигации */
+}
+
+.modal-content {
+    background-color: var(--primary-bg-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    max-width: 24rem;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+/* Error Message */
+.error-message {
+    background-color: #b91c1c; /* bg-red-800 */
+    border: 1px solid #dc2626; /* border-red-600 */
+    color: #fecaca; /* text-red-200 */
+    padding: 1rem;
+    border-radius: 0.375rem;
+    margin-top: 1rem;
+    display: none; /* Управляется JS */
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+/* Custom Message Modal (for JS alerts) */
+.custom-message-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: calc(var(--modal-z-index) + 10); /* Выше других модальных окон */
+}
+
+.custom-message-content {
+    background-color: var(--primary-bg-color);
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    max-width: 80%;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.custom-message-content p {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.custom-message-content button {
+    background-color: var(--text-color);
+    color: black;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
 }
