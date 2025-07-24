@@ -30,7 +30,7 @@ class CryptoVisionApp {
         const idsToCollect = [
             'chartImageUpload', 'imageUploadArea', 'imagePreview', 'uploadImagePlaceholder',
             'chartImageUploadHome', 'imageUploadAreaHome', 'imagePreviewHome', 'uploadImagePlaceholderHome',
-            'getAnalysisBtn', 'buttonText', 'analysisResult', 'errorMessage', 'errorText',
+            'getAnalysisBtn', 'buttonText', 'analysisResult', 'errorMessage', 'errorText', 'clearAnalysisBtn',
             'outputAction', 'outputEntryPrice', 'outputTargetPrice', 'outputStopLoss', 'outputTakeProfit',
             'outputTrend', 'outputVolatility', 'outputVolume', 'outputSentiment',
             'homePage', 'analysisPage', 'instructionModal', 'loadingModal', 'splashScreen',
@@ -56,8 +56,6 @@ class CryptoVisionApp {
             Telegram.WebApp.expand();
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
             }
-        } else {
-            // console.warn('Telegram Web App API not available. Running in standalone mode. Real payments and camera will not work.');
         }
     }
 
@@ -87,6 +85,9 @@ class CryptoVisionApp {
                     this.activateNav(analysisNavItem);
                 }
             });
+        }
+        if (this.elements.clearAnalysisBtn) {
+            this.elements.clearAnalysisBtn.addEventListener('click', () => this.clearAnalysis());
         }
 
         if (this.elements.creditAmountSelect) {
@@ -306,7 +307,50 @@ class CryptoVisionApp {
             }
             if (this.elements.getAnalysisBtn) {
                 this.elements.getAnalysisBtn.disabled = false;
+                // Скрываем кнопку "Получить анализ"
+                this.elements.getAnalysisBtn.classList.add('hidden'); 
             }
+            // Показываем кнопку "Очистить"
+            if (this.elements.clearAnalysisBtn) {
+                this.elements.clearAnalysisBtn.classList.remove('hidden');
+            }
+        }
+    }
+    
+    clearAnalysis() {
+        this.hideAnalysisResult(); 
+        this.resetImageUpload();
+
+        if (this.elements.outputAction) this.elements.outputAction.textContent = '';
+        if (this.elements.outputEntryPrice) this.elements.outputEntryPrice.textContent = '';
+        if (this.elements.outputTargetPrice) this.elements.outputTargetPrice.textContent = '';
+        if (this.elements.outputStopLoss) this.elements.outputStopLoss.textContent = '';
+        if (this.elements.outputTakeProfit) this.elements.outputTakeProfit.textContent = '';
+        if (this.elements.outputTrend) this.elements.outputTrend.textContent = '';
+        if (this.elements.outputVolatility) this.elements.outputVolatility.textContent = '';
+        if (this.elements.outputVolume) this.elements.outputVolume.textContent = '';
+        if (this.elements.outputSentiment) this.elements.outputSentiment.textContent = '';
+
+        this.showPage('analysisPage');
+        const analysisNavItem = document.querySelector('.nav-item[data-page="analysisPage"]');
+        if (analysisNavItem) {
+            this.activateNav(analysisNavItem);
+        }
+
+        if (this.elements.imageUploadArea && this.elements.imageUploadArea.closest('.glow-wrapper')) {
+            this.elements.imageUploadArea.closest('.glow-wrapper').classList.remove('glow-active');
+        }
+        if (this.elements.imageUploadAreaHome && this.elements.imageUploadAreaHome.closest('.glow-wrapper')) {
+            this.elements.imageUploadAreaHome.closest('.glow-wrapper').classList.remove('glow-active');
+        }
+
+        // Показываем кнопку "Получить анализ"
+        if (this.elements.getAnalysisBtn) {
+            this.elements.getAnalysisBtn.classList.remove('hidden');
+        }
+        // Скрываем кнопку "Очистить"
+        if (this.elements.clearAnalysisBtn) {
+            this.elements.clearAnalysisBtn.classList.add('hidden');
         }
     }
 
