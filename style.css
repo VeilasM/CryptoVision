@@ -1,11 +1,10 @@
 /* style.css */
 
-/* CSS Variables for better maintainability */
 :root {
     --primary-bg-color: #000;
     --secondary-bg-color: #111;
     --text-color: #FFF;
-    --accent-color: #00ffff; /* Пример акцентного цвета */
+    --accent-color: #00ffff;
     --border-color: #111;
     --header-height: 5.5rem;
     --bottom-nav-height: 5.5rem;
@@ -14,19 +13,18 @@
     --header-z-index: 1000;
 }
 
-/* Base styles and container */
 body {
     font-family: 'Inter', sans-serif;
     background: var(--primary-bg-color);
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Начало контента сверху */
+    align-items: flex-start;
     min-height: 100vh;
     padding: 1rem;
     box-sizing: border-box;
     color: var(--text-color);
     position: relative;
-    padding-bottom: var(--bottom-nav-height); /* Отступ для фиксированной нижней навигации */
+    padding-bottom: var(--bottom-nav-height);
 }
 
 .app-container {
@@ -35,7 +33,7 @@ body {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.8);
     padding: 1.5rem;
     width: 100%;
-    max-width: 500px; /* Ограничение ширины для мобильного вида */
+    max-width: 500px;
     box-sizing: border-box;
     min-height: 70vh;
     display: flex;
@@ -43,7 +41,6 @@ body {
     position: relative;
 }
 
-/* Header styles */
 .app-header {
     display: flex;
     justify-content: space-between;
@@ -51,10 +48,10 @@ body {
     padding: 0.5rem 0;
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--border-color);
-    position: sticky; /* Фиксированный заголовок при скролле */
+    position: sticky;
     top: 0;
     background-color: var(--primary-bg-color);
-    z-index: var(--header-z-index); /* Слой выше основного контента */
+    z-index: var(--header-z-index);
 }
 
 .app-header .logo-section {
@@ -68,7 +65,7 @@ body {
 .app-header .logo-img {
     width: 30px;
     height: 30px;
-    filter: none; /* Убираем любые фильтры, чтобы не конфликтовать */
+    filter: none;
 }
 
 .app-header .logo-text {
@@ -112,7 +109,6 @@ body {
     border: none;
 }
 
-/* Main content area */
 .main-content {
     flex-grow: 1;
     padding-top: 1rem;
@@ -127,22 +123,15 @@ body {
 
 .page.active {
     display: flex;
-    /* animation: fadeIn 0.5s ease-out; */ /* Анимации были закомментированы, можно включить */
 }
 
-/* @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-} */
-
-/* Primary Button */
 .btn-primary {
     background-image: linear-gradient(to right, var(--primary-bg-color) 0%, var(--secondary-bg-color) 100%);
     color: var(--text-color);
     padding: 0.85rem 1.75rem;
     border-radius: 2rem;
     font-weight: 700;
-    transition: all 0.3s ease; /* Добавлено для плавного ховера */
+    transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
     cursor: pointer;
     border: none;
@@ -153,22 +142,21 @@ body {
 
 .btn-primary:hover {
     opacity: 0.95;
-    transform: translateY(-3px); /* Эффект подъема при ховере */
+    transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 .btn-analysis {
-    background-image: none; /* Убираем градиент */
-    background-color: var(--text-color); /* Делаем фон белым */
-    color: var(--primary-bg-color); /* Текст делаем чёрным, чтобы он был виден на белом фоне */
+    background-image: none;
+    background-color: var(--text-color);
+    color: var(--primary-bg-color);
 }
 
 .btn-analysis:hover {
-    background-color: #e0e0e0; /* Более темный оттенок белого при наведении */
-    transform: translateY(-2px); /* Небольшой эффект при ховере */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Обновлённая тень */
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Secondary Button */
 .btn-secondary {
     background-color: var(--primary-bg-color);
     color: var(--text-color);
@@ -180,23 +168,16 @@ body {
     outline: none;
 }
 
-/* Loading Spinner */
 .loading-spinner {
     border: 4px solid var(--secondary-bg-color);
     border-top: 4px solid var(--text-color);
     border-radius: 50%;
     width: 30px;
     height: 30px;
-    animation: spin 1s linear infinite; /* Анимация вращения */
+    animation: spin 1s linear infinite;
     margin: 1rem auto;
 }
 
-/* @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-} */
-
-/* Card styles */
 .card {
     background-color: var(--primary-bg-color);
     border-radius: 1rem;
@@ -208,7 +189,7 @@ body {
 }
 
 .about-card {
-    border: none; /* Убираем границу для конкретной карточки */
+    border: none;
 }
 
 .analysis-item span:first-child {
@@ -216,52 +197,58 @@ body {
     color: var(--text-color);
 }
 
-/* Image Upload Area with Glow */
 .glow-wrapper {
     position: relative;
     width: 200px;
     height: 200px;
-    margin: 0 auto 0.5rem;
+    margin: 0 auto 1rem;
     border-radius: 1.5rem;
     overflow: visible;
     z-index: 0;
+    border: 3px solid transparent;
+    box-shadow: none;
+    transition: border 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+.glow-wrapper.glow-active {
+    border: 3px solid #8A2BE2;
+    box-shadow: 0 0 15px #8A2BE2, 0 0 30px #8A2BE2;
 }
 
 .glow-wrapper::before {
     content: '';
     position: absolute;
-    top: -8px; /* Уменьшено */
-    left: -8px; /* Уменьшено */
-    right: -8px; /* Уменьшено */
-    bottom: -8px; /* Уменьшено */
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
     border-radius: 2rem;
     z-index: -1;
     background: conic-gradient(
-        from 180deg,
-        #00ffff,
-        #007fff,
-        #6a0dad,
-        #ff1493,
-        #ff4500,
-        #ffd700,
-        #00ffff
+        from 0deg,
+        #8A2BE2,
+        #4169E1,
+        #00BFFF,
+        #1E90FF,
+        #6A5ACD,
+        #4169E1,
+        #8A2BE2
     );
-    filter: blur(20px); /* Можно также уменьшить blur для менее сильного свечения */
-    opacity: 1;
-    animation: rotateGlow 8s linear infinite;
+    filter: blur(40px) brightness(1.6);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
-
+.glow-wrapper.glow-active::before {
+    opacity: 1;
+    animation: rotateGlow 6s linear infinite;
+}
 .image-upload-area {
     width: 100%;
     height: 100%;
     border-radius: 1.5rem;
     overflow: hidden;
-    background-color: var(--primary-bg-color);
+    background-color: #000;
     position: relative;
-    z-index: 1; /* Поверх свечения */
-    display: flex; /* Центрирование содержимого */
-    align-items: center;
-    justify-content: center;
+    z-index: 1;
 }
 
 .image-upload-area img {
@@ -269,16 +256,14 @@ body {
     height: 100%;
     object-fit: cover;
     border-radius: 1.5rem;
-    z-index: 2; /* Поверх плейсхолдера */
-    position: absolute;
-    top: 0;
-    left: 0;
-    filter: none;
+    z-index: 2;
+    position: relative;
+    filter: brightness(1.2);
 }
 
 @keyframes rotateGlow {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .upload-icon-img {
@@ -291,7 +276,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0; /* Под изображением-превью и текстом */
+    z-index: 0;
 }
 
 .image-preview {
@@ -300,7 +285,7 @@ body {
     object-fit: cover;
     filter: none;
     border-radius: 0.5rem;
-    display: none; /* Скрыто по умолчанию, управляется JS */
+    display: none;
     border: none;
     z-index: 1;
     position: absolute;
@@ -309,7 +294,7 @@ body {
 }
 
 .image-preview.is-active {
-    display: block; /* Показывается, когда изображение загружено */
+    display: block;
 }
 
 .upload-text {
@@ -324,19 +309,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    pointer-events: none; /* Пропускает клики на область загрузки */
+    pointer-events: none;
     z-index: 2;
 }
 
 .upload-text.is-hidden {
-    display: none; /* Скрывается при загрузке изображения */
+    display: none;
 }
 
 .upload-icon-img.is-hidden {
-    display: none; /* Скрывается при загрузке изображения */
+    display: none;
 }
 
-/* Subscription plans */
 .subscription-plan {
     background-color: var(--primary-bg-color);
     border: none;
@@ -368,8 +352,6 @@ body {
     margin: 0 auto 1rem;
 }
 
-/* Corrected Tailwind color overrides for specific use cases */
-/* Использовать эти классы напрямую в HTML для изменения цвета текста */
 .text-green-500 { color: #22c55e; }
 .text-red-500 { color: #ef4444; }
 
@@ -428,7 +410,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* Collapsible sections */
 .collapsible-section {
     background-color: var(--primary-bg-color);
     border-radius: 1rem;
@@ -453,7 +434,7 @@ body {
 }
 
 .collapsible-header:hover {
-    background-color: #222; /* Эффект ховера */
+    background-color: #222;
 }
 
 .collapsible-header .arrow-icon {
@@ -529,7 +510,7 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     border-radius: 1rem;
-    z-index: 100; /* Более высокий z-index для overlay */
+    z-index: 100;
     text-align: center;
 }
 
@@ -546,7 +527,6 @@ body {
     color: var(--text-color);
 }
 
-/* Bottom Navigation */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -560,7 +540,7 @@ body {
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.8);
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
-    z-index: 9999; /* Самый высокий z-index для навигации */
+    z-index: 9999;
     height: var(--bottom-nav-height);
     border-top: 1px solid var(--border-color);
     pointer-events: auto;
@@ -583,7 +563,7 @@ body {
 }
 
 .nav-item:hover {
-    color: #AAA; /* Небольшое изменение цвета при ховере */
+    color: #AAA;
 }
 
 .nav-item .nav-icon-circle {
@@ -618,7 +598,6 @@ body {
     color: var(--text-color);
 }
 
-/* Loading Modal */
 .loading-modal {
     position: fixed;
     top: 0;
@@ -630,7 +609,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: var(--modal-z-index); /* Выше обычной навигации */
+    z-index: var(--modal-z-index);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -673,7 +652,6 @@ body {
     animation: spin 1s linear infinite;
 }
 
-/* Token counter styles */
 .token-counter {
     background-color: var(--secondary-bg-color);
     padding: 0.5rem 0.75rem;
@@ -692,7 +670,6 @@ body {
     filter: none;
 }
 
-/* Subscription options */
 .subscription-options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -836,7 +813,6 @@ body {
     flex-grow: 1;
 }
 
-/* Splash Screen */
 .splash-screen {
     position: fixed;
     top: 0;
@@ -879,7 +855,6 @@ body {
     to { transform: scale(1.05); }
 }
 
-/* Home Page specific styles */
 #homePage .main-title {
     font-size: 1.8rem;
     font-weight: bold;
@@ -927,7 +902,7 @@ body {
 
 .home-features-list {
     display: flex;
-    flex-direction: column; /* Изменено на столбец */
+    flex-direction: column;
     gap: 0.75rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -940,7 +915,7 @@ body {
     border-radius: 0;
     padding: 0;
     display: flex;
-    flex-direction: column; /* Изменено на столбец */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
@@ -957,7 +932,6 @@ body {
     filter: none;
 }
 
-/* Analysis Page specific styles */
 #analysisPage .header-text {
     font-size: 1.8rem;
     font-weight: bold;
@@ -1023,7 +997,6 @@ body {
     margin-bottom: 1rem;
 }
 
-/* Modals */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -1035,7 +1008,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    z-index: var(--modal-z-index); /* Выше обычной навигации */
+    z-index: var(--modal-z-index);
 }
 
 .modal-content {
@@ -1052,22 +1025,20 @@ body {
     display: none;
 }
 
-/* Error Message */
 .error-message {
-    background-color: #b91c1c; /* bg-red-800 */
-    border: 1px solid #dc2626; /* border-red-600 */
-    color: #fecaca; /* text-red-200 */
+    background-color: #b91c1c;
+    border: 1px solid #dc2626;
+    color: #fecaca;
     padding: 1rem;
     border-radius: 0.375rem;
     margin-top: 1rem;
-    display: none; /* Управляется JS */
+    display: none;
 }
 
 .error-message.hidden {
     display: none;
 }
 
-/* Custom Message Modal (for JS alerts) */
 .custom-message-modal {
     position: fixed;
     top: 0;
@@ -1078,7 +1049,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: calc(var(--modal-z-index) + 10); /* Выше других модальных окон */
+    z-index: calc(var(--modal-z-index) + 10);
 }
 
 .custom-message-content {

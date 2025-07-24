@@ -1,14 +1,10 @@
-// script.js
 class CryptoVisionApp {
     constructor() {
-        // Получаем все DOM-элементы один раз при инициализации приложения
-        this.elements = this.getDOMElements();
-        // Глобальные переменные состояния
+        this.elements = {};
         this.uploadedImageBase64 = null;
         this.userPlanLevel = 'basic';
-        this.currentSubscriptionType = 'monthly'; // Тип подписки по умолчанию
+        this.currentSubscriptionType = 'monthly';
 
-        // Хардкодные данные (в реальном приложении должны приходить с бэкенда)
         this.creditPrices = {
             '5': 1.30, '10': 2.50, '75': 15.00, '200': 30.00, '500': 60.00, '1200': 100.00, '4000': 250.00, '8000': 400.00
         };
@@ -23,18 +19,17 @@ class CryptoVisionApp {
             'vip_yearly': { credits: 1500, price: 90 * 12 * 0.7, save: '30%' }
         };
 
-        // Инициализация Telegram Web App и добавление слушателей событий
         this.initTelegramWebApp();
-        this.createDynamicPages(); // Создаем страницы, которых нет в HTML
+        this.createDynamicPages();
+        this.elements = { ...this.elements, ...this.getDOMElements() }; 
         this.addEventListeners();
     }
 
-    // Метод для получения всех необходимых DOM-элементов
     getDOMElements() {
         const elements = {};
-        [
-            'chartImageUpload', 'imageUploadArea', 'imagePreview', 'uploadText', 'uploadImagePlaceholder',
-            'chartImageUploadHome', 'imageUploadAreaHome', 'imagePreviewHome', 'uploadTextHome', 'uploadImagePlaceholderHome',
+        const idsToCollect = [
+            'chartImageUpload', 'imageUploadArea', 'imagePreview', 'uploadImagePlaceholder',
+            'chartImageUploadHome', 'imageUploadAreaHome', 'imagePreviewHome', 'uploadImagePlaceholderHome',
             'getAnalysisBtn', 'buttonText', 'analysisResult', 'errorMessage', 'errorText',
             'outputAction', 'outputEntryPrice', 'outputTargetPrice', 'outputStopLoss', 'outputTakeProfit',
             'outputTrend', 'outputVolatility', 'outputVolume', 'outputSentiment',
@@ -42,82 +37,94 @@ class CryptoVisionApp {
             'tokenCounter', 'headerTokens', 'currentTokens', 'subscriptionEndDate',
             'monthlyToggle', 'yearlyToggle', 'payAsYouGoSection', 'subscriptionSection',
             'creditAmountSelect', 'currentCreditPrice', 'planSelect', 'currentPlanCredits', 'currentSubscriptionPrice',
-            'uploadAndAnalyzeBtn', 'disclaimerTextElement'
-        ].forEach(id => {
-            elements[id] = document.getElementById(id);
+            'uploadAndAnalyzeBtn', 'disclaimerText'
+        ];
+
+        idsToCollect.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                elements[id] = element;
+            }
         });
         elements.navItems = document.querySelectorAll('.nav-item');
         return elements;
     }
 
-    // Инициализация Telegram Web App
     initTelegramWebApp() {
         if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
             Telegram.WebApp.ready();
             Telegram.WebApp.expand();
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
-                const user = Telegram.WebApp.initDataUnsafe.user;
-                // console.log('Telegram User:', user); // Для отладки
             }
         } else {
-            console.warn('Telegram Web App API not available. Running in standalone mode. Real payments and camera will not work.');
+            // console.warn('Telegram Web App API not available. Running in standalone mode. Real payments and camera will not work.');
         }
     }
 
-    // Добавление всех слушателей событий
     addEventListeners() {
-        this.elements.imageUploadArea.addEventListener('click', () => this.elements.chartImageUpload.click());
-        this.elements.chartImageUpload.addEventListener('change', (event) => this.handleImageUpload(event, 'analysis'));
+        if (this.elements.imageUploadArea) {
+            this.elements.imageUploadArea.addEventListener('click', () => this.elements.chartImageUpload.click());
+        }
+        if (this.elements.chartImageUpload) {
+            this.elements.chartImageUpload.addEventListener('change', (event) => this.handleImageUpload(event, 'analysis'));
+        }
 
-        this.elements.imageUploadAreaHome.addEventListener('click', () => this.elements.chartImageUploadHome.click());
-        this.elements.chartImageUploadHome.addEventListener('change', (event) => this.handleImageUpload(event, 'home'));
+        if (this.elements.imageUploadAreaHome) {
+            this.elements.imageUploadAreaHome.addEventListener('click', () => this.elements.chartImageUploadHome.click());
+        }
+        if (this.elements.chartImageUploadHome) {
+            this.elements.chartImageUploadHome.addEventListener('change', (event) => this.handleImageUpload(event, 'home'));
+        }
 
-        this.elements.getAnalysisBtn.addEventListener('click', () => this.getAnalysis());
-        this.elements.uploadAndAnalyzeBtn.addEventListener('click', () => {
-            this.showPage('analysisPage');
-            this.activateNav(document.querySelector('.nav-item[data-page="analysisPage"]'));
-        });
+        if (this.elements.getAnalysisBtn) {
+            this.elements.getAnalysisBtn.addEventListener('click', () => this.getAnalysis());
+        }
+        if (this.elements.uploadAndAnalyzeBtn) {
+            this.elements.uploadAndAnalyzeBtn.addEventListener('click', () => {
+                this.showPage('analysisPage');
+                const analysisNavItem = document.querySelector('.nav-item[data-page="analysisPage"]');
+                if (analysisNavItem) {
+                    this.activateNav(analysisNavItem);
+                }
+            });
+        }
 
         if (this.elements.creditAmountSelect) {
-            this.elements.creditAmountSelect.addEventListener('change', () => this.updateCreditPrice());
+            this.elements.creditAmountSelect.addEventListener('change', this.updateCreditPrice.bind(this));
         }
         if (this.elements.planSelect) {
-            this.elements.planSelect.addEventListener('change', () => this.updateSubscriptionPrice());
+            this.elements.planSelect.addEventListener('change', this.updateSubscriptionPrice.bind(this));
         }
         if (this.elements.monthlyToggle) {
-            this.elements.monthlyToggle.addEventListener('click', () => this.toggleSubscriptionView('monthly'));
+            this.elements.monthlyToggle.addEventListener('click', this.toggleSubscriptionView.bind(this, 'monthly'));
         }
         if (this.elements.yearlyToggle) {
-            this.elements.yearlyToggle.addEventListener('click', () => this.toggleSubscriptionView('yearly'));
+            this.elements.yearlyToggle.addEventListener('click', this.toggleSubscriptionView.bind(this, 'yearly'));
         }
     }
 
-    // Создание страниц, которые отсутствуют в index.html (для гибкости)
     createDynamicPages() {
         const mainContent = document.querySelector('.main-content');
         if (!mainContent) {
-            console.error('Main content container not found!');
             return;
         }
 
         const createPage = (id, title, contentHTML = `<h2 class="text-xl font-semibold text-center mb-4 text-white">${title}</h2><p class="text-white text-center">Эта страница находится в разработке.</p>`) => {
             let page = document.getElementById(id);
-            if (!page) { // Создаем, только если страницы нет
-                page = document.createElement('section'); // Используем <section> для семантики
+            if (!page) {
+                page = document.createElement('section');
                 page.id = id;
                 page.className = 'page';
                 page.innerHTML = contentHTML;
                 mainContent.appendChild(page);
+                this.elements[id] = page; 
             }
             return page;
         };
 
-        // Создаем страницы "Поиск" и "Чат"
         this.elements.searchPage = createPage('searchPage', 'Поиск Информации');
         this.elements.chatPage = createPage('chatPage', 'AI Чат');
         this.elements.coursePage = createPage('coursePage', 'Курс');
-
-        // Для страницы "Профиль" используем более сложный HTML
         this.elements.profilePage = createPage('profilePage', 'Профиль', `
             <p class="text-lg font-bold mb-2 text-white text-center">Текущий план: Базовый</p>
             <p class="mb-2 text-white text-center">Остаток токенов: <span class="font-bold text-white" id="currentTokens">100</span></p>
@@ -128,7 +135,7 @@ class CryptoVisionApp {
                 <div class="card" id="payAsYouGoSection">
                     <h3 class="text-xl font-bold text-center mb-4 text-white">Покупка токенов</h3>
                     <label for="creditAmountSelect" class="block text-sm font-medium text-white mb-2">Количество:</label>
-                    <select id="creditAmountSelect" class="credit-select-box mb-4" onchange="app.updateCreditPrice()">
+                    <select id="creditAmountSelect" class="credit-select-box mb-4">
                         <option value="5">5 кредитов</option>
                         <option value="10">10 кредитов</option>
                         <option value="75">75 кредитов</option>
@@ -152,7 +159,7 @@ class CryptoVisionApp {
                         </div>
                     </div>
                     <label for="planSelect" class="block text-sm font-medium text-white mb-2">План:</label>
-                    <select id="planSelect" class="credit-select-box mb-4" onchange="app.updateSubscriptionPrice()">
+                    <select id="planSelect" class="credit-select-box mb-4">
                         <option value="starter_monthly">200 кредитов - Starter Plan</option>
                         <option value="pro_monthly">650 кредитов - Pro Plan</option>
                         <option value="vip_monthly">1500 кредитов - VIP Plan</option>
@@ -163,12 +170,9 @@ class CryptoVisionApp {
                 </div>
             </div>
         `);
-        // После создания динамических элементов, обновим ссылки в this.elements
-        this.elements = { ...this.elements, ...this.getDOMElements() };
     }
 
-    // Обработка загрузки изображения
-    handleImageUpload(event, pageType) {
+    handleImageUpload(event) {
         const file = event.target.files[0];
         if (!file) {
             this.resetImageUpload();
@@ -180,50 +184,74 @@ class CryptoVisionApp {
             const base64Image = e.target.result;
             this.uploadedImageBase64 = base64Image.split(',')[1];
 
-            // Обновляем превью на текущей странице и на всех связанных
-            this.elements.imagePreview.src = base64Image;
-            this.elements.imagePreview.classList.add('is-active');
-            this.elements.uploadText.classList.add('is-hidden');
-            this.elements.uploadImagePlaceholder.classList.add('is-hidden');
+            if (this.elements.imagePreview) {
+                this.elements.imagePreview.src = base64Image;
+                this.elements.imagePreview.classList.add('is-active');
+            }
+            if (this.elements.uploadImagePlaceholder) {
+                this.elements.uploadImagePlaceholder.classList.add('is-hidden');
+            }
 
-            this.elements.imagePreviewHome.src = base64Image;
-            this.elements.imagePreviewHome.classList.add('is-active');
-            this.elements.uploadTextHome.classList.add('is-hidden');
-            this.elements.uploadImagePlaceholderHome.classList.add('is-hidden');
+            if (this.elements.imagePreviewHome) {
+                this.elements.imagePreviewHome.src = base64Image;
+                this.elements.imagePreviewHome.classList.add('is-active');
+            }
+            if (this.elements.uploadImagePlaceholderHome) {
+                this.elements.uploadImagePlaceholderHome.classList.add('is-hidden');
+            }
         };
         reader.readAsDataURL(file);
     }
 
-    // Сброс загруженного изображения
     resetImageUpload() {
         this.uploadedImageBase64 = null;
 
-        this.elements.imagePreview.src = '#';
-        this.elements.imagePreview.classList.remove('is-active');
-        this.elements.uploadText.classList.remove('is-hidden');
-        this.elements.uploadImagePlaceholder.classList.remove('is-hidden');
+        if (this.elements.imagePreview) {
+            this.elements.imagePreview.src = '#';
+            this.elements.imagePreview.classList.remove('is-active');
+        }
+        if (this.elements.uploadImagePlaceholder) {
+            this.elements.uploadImagePlaceholder.classList.remove('is-hidden');
+        }
 
-        this.elements.imagePreviewHome.src = '#';
-        this.elements.imagePreviewHome.classList.remove('is-active');
-        this.elements.uploadTextHome.classList.remove('is-hidden');
-        this.elements.uploadImagePlaceholderHome.classList.remove('is-hidden');
+        if (this.elements.imagePreviewHome) {
+            this.elements.imagePreviewHome.src = '#';
+            this.elements.imagePreviewHome.classList.remove('is-active');
+        }
+        if (this.elements.uploadImagePlaceholderHome) {
+            this.elements.uploadImagePlaceholderHome.classList.remove('is-hidden');
+        }
     }
 
-    // Получение анализа (имитация запроса к AI)
     async getAnalysis() {
         if (!this.uploadedImageBase64) {
             this.showErrorMessage('Пожалуйста, загрузите изображение графика для анализа.');
             return;
         }
 
-        this.showLoadingModal();
         this.hideErrorMessage();
         this.hideAnalysisResult();
 
-        try {
-            await new Promise(resolve => setTimeout(resolve, 3000)); // Имитация задержки API
+        if (this.elements.imageUploadArea && this.elements.imageUploadArea.closest('.glow-wrapper')) {
+            this.elements.imageUploadArea.closest('.glow-wrapper').classList.add('glow-active');
+        }
+        if (this.elements.imageUploadAreaHome && this.elements.imageUploadAreaHome.closest('.glow-wrapper')) {
+            this.elements.imageUploadAreaHome.closest('.glow-wrapper').classList.add('glow-active');
+        }
 
-            // Имитация данных анализа (должны приходить с бэкенда)
+        if (this.elements.buttonText) {
+            this.elements.buttonText.textContent = 'Идёт анализ...';
+        }
+        if (this.elements.loadingSpinner) {
+            this.elements.loadingSpinner.classList.remove('hidden');
+        }
+        if (this.elements.getAnalysisBtn) {
+            this.elements.getAnalysisBtn.disabled = true;
+        }
+
+        try {
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
             const dummyAnalysisData = {
                 action: 'LONG',
                 entryPrice: '122,000',
@@ -236,40 +264,52 @@ class CryptoVisionApp {
                 planLevel: 'basic'
             };
 
-            // Обновление UI с данными анализа
-            this.elements.outputAction.textContent = dummyAnalysisData.action;
-            this.elements.outputEntryPrice.textContent = dummyAnalysisData.entryPrice;
-            this.elements.outputTargetPrice.textContent = dummyAnalysisData.targetPrice;
-            this.elements.outputStopLoss.textContent = dummyAnalysisData.stopLoss;
-            this.elements.outputTakeProfit.textContent = dummyAnalysisData.targetPrice;
-            this.elements.outputTrend.textContent = dummyAnalysisData.trend;
-            this.elements.outputVolatility.textContent = dummyAnalysisData.volatility;
-            this.elements.outputVolume.textContent = dummyAnalysisData.volume;
-            this.elements.outputSentiment.textContent = dummyAnalysisData.sentiment;
+            if (this.elements.outputAction) this.elements.outputAction.textContent = dummyAnalysisData.action;
+            if (this.elements.outputEntryPrice) this.elements.outputEntryPrice.textContent = dummyAnalysisData.entryPrice;
+            if (this.elements.outputTargetPrice) this.elements.outputTargetPrice.textContent = dummyAnalysisData.targetPrice;
+            if (this.elements.outputStopLoss) this.elements.outputStopLoss.textContent = dummyAnalysisData.stopLoss;
+            if (this.elements.outputTakeProfit) this.elements.outputTakeProfit.textContent = dummyAnalysisData.targetPrice;
+            if (this.elements.outputTrend) this.elements.outputTrend.textContent = dummyAnalysisData.trend;
+            if (this.elements.outputVolatility) this.elements.outputVolatility.textContent = dummyAnalysisData.volatility;
+            if (this.elements.outputVolume) this.elements.outputVolume.textContent = dummyAnalysisData.volume;
+            if (this.elements.outputSentiment) this.elements.outputSentiment.textContent = dummyAnalysisData.sentiment;
 
-            // Пример динамического изменения цвета действия
-            if (dummyAnalysisData.action === 'КУПИТЬ' || dummyAnalysisData.action === 'LONG') {
-                this.elements.outputAction.style.color = '#22c55e'; // Tailwind green-500
-            } else if (dummyAnalysisData.action === 'ПРОДАТЬ' || dummyAnalysisData.action === 'SHORT') {
-                this.elements.outputAction.style.color = '#ef4444'; // Tailwind red-500
-            } else {
+            if (this.elements.outputAction) {
                 this.elements.outputAction.style.color = '#FFF';
+                if (dummyAnalysisData.action === 'КУПИТЬ' || dummyAnalysisData.action === 'LONG') {
+                    this.elements.outputAction.style.color = '#22c55e';
+                } else if (dummyAnalysisData.action === 'ПРОДАТЬ' || dummyAnalysisData.action === 'SHORT') {
+                    this.elements.outputAction.style.color = '#ef4444';
+                }
             }
 
-            this.userPlanLevel = dummyAnalysisData.planLevel; // Обновляем уровень плана пользователя
+            this.userPlanLevel = dummyAnalysisData.planLevel;
 
             this.showAnalysisResult();
-            this.updateTokenCounter(-1); // Вычитаем 1 токен за анализ
+            this.updateTokenCounter(-1);
 
         } catch (error) {
-            console.error("Ошибка при получении анализа:", error);
             this.showErrorMessage('Произошла непредвиденная ошибка при получении анализа. Пожалуйста, попробуйте позже.');
         } finally {
-            this.hideLoadingModal();
+            if (this.elements.imageUploadArea && this.elements.imageUploadArea.closest('.glow-wrapper')) {
+                this.elements.imageUploadArea.closest('.glow-wrapper').classList.remove('glow-active');
+            }
+            if (this.elements.imageUploadAreaHome && this.elements.imageUploadAreaHome.closest('.glow-wrapper')) {
+                this.elements.imageUploadAreaHome.closest('.glow-wrapper').classList.remove('glow-active');
+            }
+            
+            if (this.elements.buttonText) {
+                this.elements.buttonText.textContent = 'Получить анализ';
+            }
+            if (this.elements.loadingSpinner) {
+                this.elements.loadingSpinner.classList.add('hidden');
+            }
+            if (this.elements.getAnalysisBtn) {
+                this.elements.getAnalysisBtn.disabled = false;
+            }
         }
     }
 
-    // Запрос платежа через Telegram Stars
     requestSubscriptionPayment(starsAmount, payloadType) {
         const invoicePayload = `${payloadType}_${starsAmount}`;
         if (typeof Telegram !== 'undefined' && Telegram.WebApp) {
@@ -280,7 +320,7 @@ class CryptoVisionApp {
                         const credits = parseInt(payloadType.split('_')[2]);
                         this.updateTokenCounter(credits);
                     } else if (payloadType.startsWith('upgrade_plan')) {
-                        this.userPlanLevel = 'premium'; // Обновляем уровень плана для демо
+                        this.userPlanLevel = 'premium';
                         this.showCustomMessage('Ваша подписка успешно обновлена до Премиум!');
                         const today = new Date();
                         const futureDate = new Date(today.setMonth(today.getMonth() + (this.currentSubscriptionType === 'monthly' ? 1 : 12)));
@@ -305,7 +345,6 @@ class CryptoVisionApp {
         }
     }
 
-    // Показ кастомного сообщения (заменяет alert)
     showCustomMessage(message) {
         const modal = document.createElement('div');
         modal.className = 'custom-message-modal';
@@ -318,14 +357,14 @@ class CryptoVisionApp {
         document.body.appendChild(modal);
     }
 
-    // Обновление цены за токены
     updateCreditPrice() {
         const selectedCredits = this.elements.creditAmountSelect.value;
         const price = this.creditPrices[selectedCredits];
-        this.elements.currentCreditPrice.textContent = `$${price.toFixed(2)}`;
+        if (this.elements.currentCreditPrice) {
+            this.elements.currentCreditPrice.textContent = `$${price.toFixed(2)}`;
+        }
     }
 
-    // Обновление цены подписки
     updateSubscriptionPrice() {
         let selectedPlanValue = this.elements.planSelect.value;
         let details;
@@ -335,44 +374,53 @@ class CryptoVisionApp {
             if (selectedPlanValue.includes('_yearly')) {
                 selectedPlanValue = selectedPlanValue.replace('_yearly', '_monthly');
             }
-            this.elements.planSelect.innerHTML = `
-                <option value="starter_monthly">200 кредитов - Starter Plan</option>
-                <option value="pro_monthly">650 кредитов - Pro Plan</option>
-                <option value="vip_monthly">1500 кредитов - VIP Plan</option>
-            `;
-            this.elements.planSelect.value = selectedPlanValue;
+            if (this.elements.planSelect) { 
+                 this.elements.planSelect.innerHTML = `
+                    <option value="starter_monthly">200 кредитов - Starter Plan</option>
+                    <option value="pro_monthly">650 кредитов - Pro Plan</option>
+                    <option value="vip_monthly">1500 кредитов - VIP Plan</option>
+                `;
+                this.elements.planSelect.value = selectedPlanValue;
+            }
             details = this.monthlyPlanDetails[selectedPlanValue];
             displayedCredits = details ? details.credits : 0;
-        } else { // yearly
+        } else {
             if (selectedPlanValue.includes('_monthly')) {
                 selectedPlanValue = selectedPlanValue.replace('_monthly', '_yearly');
             }
-            this.elements.planSelect.innerHTML = `
-                <option value="starter_yearly">200 кредитов/мес. - Starter Plan</option>
-                <option value="pro_yearly">650 кредитов/мес. - Pro Plan</option>
-                <option value="vip_yearly">1500 кредитов/мес. - VIP Plan</option>
-            `;
-            this.elements.planSelect.value = selectedPlanValue;
+            if (this.elements.planSelect) { 
+                this.elements.planSelect.innerHTML = `
+                    <option value="starter_yearly">200 кредитов/мес. - Starter Plan</option>
+                    <option value="pro_yearly">650 кредитов/мес. - Pro Plan</option>
+                    <option value="vip_yearly">1500 кредитов/мес. - VIP Plan</option>
+                `;
+                this.elements.planSelect.value = selectedPlanValue;
+            }
             details = this.yearlyPlanDetails[selectedPlanValue];
             displayedCredits = this.monthlyPlanDetails[selectedPlanValue.replace('_yearly', '_monthly')].credits;
         }
 
         if (!details) {
-            this.elements.planSelect.value = this.elements.planSelect.options[0].value;
-            selectedPlanValue = this.elements.planSelect.value;
-            if (this.currentSubscriptionType === 'monthly') {
-                details = this.monthlyPlanDetails[selectedPlanValue];
-            } else {
-                details = this.yearlyPlanDetails[selectedPlanValue];
+            if (this.elements.planSelect) { 
+                this.elements.planSelect.value = this.elements.planSelect.options[0].value;
+                selectedPlanValue = this.elements.planSelect.value;
+                if (this.currentSubscriptionType === 'monthly') {
+                    details = this.monthlyPlanDetails[selectedPlanValue];
+                } else {
+                    details = this.yearlyPlanDetails[selectedPlanValue];
+                }
             }
             displayedCredits = this.monthlyPlanDetails[selectedPlanValue.replace('_yearly', '_monthly')].credits;
         }
 
-        this.elements.currentPlanCredits.textContent = displayedCredits;
-        this.elements.currentSubscriptionPrice.textContent = `$${details.price.toFixed(2)}/${this.currentSubscriptionType === 'monthly' ? 'месяц' : 'год'}`;
+        if (this.elements.currentPlanCredits) {
+            this.elements.currentPlanCredits.textContent = displayedCredits;
+        }
+        if (this.elements.currentSubscriptionPrice) {
+            this.elements.currentSubscriptionPrice.textContent = `$${details.price.toFixed(2)}/${this.currentSubscriptionType === 'monthly' ? 'месяц' : 'год'}`;
+        }
     }
 
-    // Покупка токенов
     purchaseCredits() {
         const selectedCredits = this.elements.creditAmountSelect.value;
         const priceInUSD = this.creditPrices[selectedCredits];
@@ -380,7 +428,6 @@ class CryptoVisionApp {
         this.requestSubscriptionPayment(starsAmount, `purchase_credits_${selectedCredits}`);
     }
 
-    // Обновление подписки
     upgradeSubscription() {
         const selectedPlan = this.elements.planSelect.value;
         let details;
@@ -394,7 +441,6 @@ class CryptoVisionApp {
         this.requestSubscriptionPayment(starsAmount, `upgrade_plan_${selectedPlan}`);
     }
 
-    // Обновление счетчика токенов
     updateTokenCounter(change) {
         let currentHeaderTokens = parseInt(this.elements.headerTokens.textContent);
         let currentProfileTokens = parseInt(this.elements.currentTokens.textContent);
@@ -402,23 +448,24 @@ class CryptoVisionApp {
         currentHeaderTokens += change;
         currentProfileTokens += change;
 
-        this.elements.headerTokens.textContent = currentHeaderTokens;
-        this.elements.currentTokens.textContent = currentProfileTokens;
+        if (this.elements.headerTokens) this.elements.headerTokens.textContent = currentHeaderTokens;
+        if (this.elements.currentTokens) this.elements.currentTokens.textContent = currentProfileTokens;
     }
 
-    // Показ страницы
     showPage(pageId) {
         this.elements.navItems.forEach(item => item.classList.remove('active'));
         document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        window.scrollTo(0, 0);
-        const targetNavItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-        if (targetNavItem) {
-            this.activateNav(targetNavItem);
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.classList.add('active');
+            window.scrollTo(0, 0);
+            const targetNavItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+            if (targetNavItem) {
+                this.activateNav(targetNavItem);
+            }
         }
     }
 
-    // Активация элемента навигации
     activateNav(element) {
         if (element) {
             this.elements.navItems.forEach(item => item.classList.remove('active'));
@@ -426,57 +473,57 @@ class CryptoVisionApp {
         }
     }
 
-    // Переключение сворачиваемых секций
     toggleCollapsible(headerElement, contentId) {
         const content = document.getElementById(contentId);
-        headerElement.classList.toggle('active');
-        content.classList.toggle('active');
+        if (headerElement) headerElement.classList.toggle('active');
+        if (content) content.classList.toggle('active');
     }
 
-    // Показ/скрытие модального окна инструкции
     showInstructionModal() {
-        this.elements.instructionModal.classList.remove('hidden');
+        if (this.elements.instructionModal) {
+            this.elements.instructionModal.classList.remove('hidden');
+        }
     }
 
     hideInstructionModal() {
-        this.elements.instructionModal.classList.add('hidden');
+        if (this.elements.instructionModal) {
+            this.elements.instructionModal.classList.add('hidden');
+        }
     }
 
-    // Показ/скрытие модального окна загрузки
-    showLoadingModal() {
-        this.elements.loadingModal.classList.add('active');
-    }
-
-    hideLoadingModal() {
-        this.elements.loadingModal.classList.remove('active');
-    }
-
-    // Показ/скрытие результатов анализа
     showAnalysisResult() {
-        this.elements.analysisResult.classList.remove('hidden');
-        if (this.elements.disclaimerTextElement) {
-            this.elements.disclaimerTextElement.classList.remove('hidden');
+        if (this.elements.analysisResult) {
+            this.elements.analysisResult.classList.remove('hidden');
+        }
+        if (this.elements.disclaimerText) {
+            this.elements.disclaimerText.classList.remove('hidden');
         }
     }
 
     hideAnalysisResult() {
-        this.elements.analysisResult.classList.add('hidden');
-        if (this.elements.disclaimerTextElement) {
-            this.elements.disclaimerTextElement.classList.add('hidden');
+        if (this.elements.analysisResult) {
+            this.elements.analysisResult.classList.add('hidden');
+        }
+        if (this.elements.disclaimerText) {
+            this.elements.disclaimerText.classList.add('hidden');
         }
     }
 
-    // Показ/скрытие сообщения об ошибке
     showErrorMessage(message) {
-        this.elements.errorText.textContent = message;
-        this.elements.errorMessage.classList.remove('hidden');
+        if (this.elements.errorText) {
+            this.elements.errorText.textContent = message;
+        }
+        if (this.elements.errorMessage) {
+            this.elements.errorMessage.classList.remove('hidden');
+        }
     }
 
     hideErrorMessage() {
-        this.elements.errorMessage.classList.add('hidden');
+        if (this.elements.errorMessage) {
+            this.elements.errorMessage.classList.add('hidden');
+        }
     }
 
-    // Переключение вида подписки (месячная/годовая)
     toggleSubscriptionView(type) {
         this.currentSubscriptionType = type;
 
@@ -492,26 +539,47 @@ class CryptoVisionApp {
         this.updateSubscriptionPrice();
     }
 
-    // Инициализация приложения при загрузке DOM
     init() {
-        this.elements.splashScreen.classList.remove('hidden');
-        setTimeout(() => {
-            this.elements.splashScreen.classList.add('hidden');
-            this.showPage('homePage');
-            this.activateNav(document.querySelector('.nav-item[data-page="homePage"]'));
-        }, 2000);
+        if (this.elements.splashScreen) {
+            this.elements.splashScreen.classList.remove('hidden');
+            setTimeout(() => {
+                this.elements.splashScreen.classList.add('hidden');
+                if (this.showPage) {
+                    this.showPage('homePage');
+                }
+                const homeNavItem = document.querySelector('.nav-item[data-page="homePage"]');
+                if (homeNavItem) {
+                    if (this.activateNav) {
+                        this.activateNav(homeNavItem);
+                    }
+                }
+            }, 2000);
+        } else {
+            if (this.showPage) {
+                this.showPage('homePage');
+            }
+            const homeNavItem = document.querySelector('.nav-item[data-page="homePage"]');
+            if (homeNavItem) {
+                if (this.activateNav) {
+                    this.activateNav(homeNavItem);
+                }
+            }
+        }
 
-        // Устанавливаем начальные значения токенов и даты подписки
-        this.elements.headerTokens.textContent = '100';
-        this.elements.currentTokens.textContent = '100';
-        this.elements.subscriptionEndDate.textContent = '15.08.2025';
+        if (this.elements.headerTokens) this.elements.headerTokens.textContent = '100';
+        if (this.elements.currentTokens) this.elements.currentTokens.textContent = '100';
+        if (this.elements.subscriptionEndDate) this.elements.subscriptionEndDate.textContent = '15.08.2025';
 
-        // Обновляем цены в UI при загрузке
-        this.updateCreditPrice();
-        this.updateSubscriptionPrice();
+        if (this.updateCreditPrice) {
+            this.updateCreditPrice();
+        }
+        if (this.updateSubscriptionPrice) {
+            this.updateSubscriptionPrice();
+        }
     }
 }
 
-// Создаем экземпляр приложения и запускаем его после загрузки DOM
 const app = new CryptoVisionApp();
-document.addEventListener('DOMContentLoaded', () => app.init());
+document.addEventListener('DOMContentLoaded', () => {
+    app.init();
+});
