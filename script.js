@@ -37,7 +37,8 @@ class CryptoVisionApp {
             'tokenCounter', 'headerTokens', 'currentTokens', 'subscriptionEndDate',
             'monthlyToggle', 'yearlyToggle', 'payAsYouGoSection', 'subscriptionSection',
             'creditAmountSelect', 'currentCreditPrice', 'planSelect', 'currentPlanCredits', 'currentSubscriptionPrice',
-            'uploadAndAnalyzeBtn', 'disclaimerText'
+            'uploadAndAnalyzeBtn', 'disclaimerText', 'chatInputArea',
+            'chatContent', 'chatMessages', 'chatInput', 'sendMessageBtn', 'chatSuggestionsContainer'
         ];
 
         idsToCollect.forEach(id => {
@@ -55,6 +56,7 @@ class CryptoVisionApp {
             Telegram.WebApp.ready();
             Telegram.WebApp.expand();
             if (Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) {
+                // Здесь можно использовать данные пользователя Telegram, если они нужны
             }
         }
     }
@@ -102,6 +104,30 @@ class CryptoVisionApp {
         if (this.elements.yearlyToggle) {
             this.elements.yearlyToggle.addEventListener('click', this.toggleSubscriptionView.bind(this, 'yearly'));
         }
+
+        // Обработчики для чата
+        if (this.elements.sendMessageBtn) {
+            this.elements.sendMessageBtn.addEventListener('click', () => this.sendMessage());
+        }
+        if (this.elements.chatInput) {
+            this.elements.chatInput.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') {
+                    this.sendMessage();
+                }
+            });
+        }
+        if (this.elements.chatSuggestionsContainer) {
+            this.elements.chatSuggestionsContainer.addEventListener('click', (event) => {
+                const suggestionBox = event.target.closest('.chat-suggestion-box');
+                if (suggestionBox) {
+                    const suggestionText = suggestionBox.querySelector('.chat-suggestion-text').textContent;
+                    if (this.elements.chatInput) {
+                        this.elements.chatInput.value = suggestionText;
+                        this.sendMessage();
+                    }
+                }
+            });
+        }
     }
 
     createDynamicPages() {
@@ -124,7 +150,6 @@ class CryptoVisionApp {
         };
 
         this.elements.searchPage = createPage('searchPage', 'Поиск Информации');
-        this.elements.chatPage = createPage('chatPage', 'AI Чат');
         this.elements.coursePage = createPage('coursePage', 'Курс');
         this.elements.profilePage = createPage('profilePage', 'Профиль', `
             <p class="text-lg font-bold mb-2 text-white text-center">Текущий план: Базовый</p>
@@ -307,10 +332,8 @@ class CryptoVisionApp {
             }
             if (this.elements.getAnalysisBtn) {
                 this.elements.getAnalysisBtn.disabled = false;
-                // Скрываем кнопку "Получить анализ"
                 this.elements.getAnalysisBtn.classList.add('hidden'); 
             }
-            // Показываем кнопку "Очистить"
             if (this.elements.clearAnalysisBtn) {
                 this.elements.clearAnalysisBtn.classList.remove('hidden');
             }
@@ -344,11 +367,9 @@ class CryptoVisionApp {
             this.elements.imageUploadAreaHome.closest('.glow-wrapper').classList.remove('glow-active');
         }
 
-        // Показываем кнопку "Получить анализ"
         if (this.elements.getAnalysisBtn) {
             this.elements.getAnalysisBtn.classList.remove('hidden');
         }
-        // Скрываем кнопку "Очистить"
         if (this.elements.clearAnalysisBtn) {
             this.elements.clearAnalysisBtn.classList.add('hidden');
         }
@@ -419,7 +440,7 @@ class CryptoVisionApp {
                 selectedPlanValue = selectedPlanValue.replace('_yearly', '_monthly');
             }
             if (this.elements.planSelect) { 
-                 this.elements.planSelect.innerHTML = `
+                this.elements.planSelect.innerHTML = `
                     <option value="starter_monthly">200 кредитов - Starter Plan</option>
                     <option value="pro_monthly">650 кредитов - Pro Plan</option>
                     <option value="vip_monthly">1500 кредитов - VIP Plan</option>
@@ -497,15 +518,26 @@ class CryptoVisionApp {
     }
 
     showPage(pageId) {
-        this.elements.navItems.forEach(item => item.classList.remove('active'));
         document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+        this.elements.navItems.forEach(item => item.classList.remove('active'));
+
         const targetPage = document.getElementById(pageId);
         if (targetPage) {
             targetPage.classList.add('active');
             window.scrollTo(0, 0);
-            const targetNavItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-            if (targetNavItem) {
-                this.activateNav(targetNavItem);
+        }
+        
+        const targetNavItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+        if (targetNavItem) {
+            this.activateNav(targetNavItem);
+        }
+
+        // Управление видимостью chatInputArea
+        if (this.elements.chatInputArea) {
+            if (pageId === 'chatPage') {
+                this.elements.chatInputArea.style.display = 'flex';
+            } else {
+                this.elements.chatInputArea.style.display = 'none';
             }
         }
     }
@@ -582,32 +614,64 @@ class CryptoVisionApp {
         }
         this.updateSubscriptionPrice();
     }
+    toggleChatSuggestions(show) {
+        if (this.elements.chatSuggestionsContainer) {
+            if (show) {
+                this.elements.chatSuggestionsContainer.classList.remove('hidden');
+            } else {
+                this.elements.chatSuggestionsContainer.classList.add('hidden');
+            }
+        }
+    }
+    sendMessage() {
+    const messageText = this.elements.chatInput.value.trim();
+    if (messageText === '') {
+        return;
+    }
+
+    this.appendMessage(messageText, 'user');
+    this.elements.chatInput.value = ''; // Очищаем поле ввода
+    this.elements.chatContent.scrollTop = this.elements.chatContent.scrollHeight;
+
+    this.toggleChatSuggestions(false); 
+    this.appendMessage("Спасибо за ваш запрос! Я анализирую информацию и скоро предоставлю вам полный отчет.", 'ai');
+    this.elements.chatContent.scrollTop = this.elements.chatContent.scrollHeight; // Прокручиваем чат вниз после ответа AI
+}
+
+    appendMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message-bubble');
+        if (sender === 'user') {
+            messageDiv.classList.add('message-user');
+        } else {
+            messageDiv.classList.add('message-ai');
+        }
+        messageDiv.textContent = text;
+        this.elements.chatMessages.appendChild(messageDiv);
+    }
 
     init() {
         if (this.elements.splashScreen) {
             this.elements.splashScreen.classList.remove('hidden');
             setTimeout(() => {
                 this.elements.splashScreen.classList.add('hidden');
-                if (this.showPage) {
-                    this.showPage('homePage');
+                
+                const bottomNav = document.querySelector('.bottom-nav');
+                if (bottomNav) {
+                    bottomNav.style.opacity = '1';
+                    bottomNav.style.visibility = 'visible';
                 }
-                const homeNavItem = document.querySelector('.nav-item[data-page="homePage"]');
-                if (homeNavItem) {
-                    if (this.activateNav) {
-                        this.activateNav(homeNavItem);
-                    }
-                }
-            }, 2000);
+
+                this.showPage('homePage'); 
+            }, 4000);
         } else {
-            if (this.showPage) {
-                this.showPage('homePage');
+            const bottomNav = document.querySelector('.bottom-nav');
+            if (bottomNav) {
+                bottomNav.style.opacity = '1';
+                bottomNav.style.visibility = 'visible';
             }
-            const homeNavItem = document.querySelector('.nav-item[data-page="homePage"]');
-            if (homeNavItem) {
-                if (this.activateNav) {
-                    this.activateNav(homeNavItem);
-                }
-            }
+
+            this.showPage('homePage');
         }
 
         if (this.elements.headerTokens) this.elements.headerTokens.textContent = '100';
@@ -619,6 +683,11 @@ class CryptoVisionApp {
         }
         if (this.updateSubscriptionPrice) {
             this.updateSubscriptionPrice();
+        }
+
+        // Скрываем chatInputArea сразу при инициализации
+        if (this.elements.chatInputArea) {
+            this.elements.chatInputArea.style.display = 'none'; 
         }
     }
 }
