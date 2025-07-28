@@ -527,7 +527,7 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: var(--primary-bg-color);
+    background-color: #222;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -564,32 +564,13 @@ body {
     color: #AAA;
 }
 
-.nav-item .nav-icon-circle {
-    background-color: var(--secondary-bg-color);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 0.15rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    border: none;
-}
-
-.nav-item:hover .nav-icon-circle {
-    background-color: #222;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
 .nav-item .nav-icon {
     font-size: 1.8rem;
     color: var(--text-color);
     filter: none;
     transition: color 0.3s ease;
-    width: 40px;
-    height: 40px;
+    width: 70px;
+    height: 50px;
 }
 
 .nav-item.active .nav-icon {
@@ -837,8 +818,8 @@ body {
     width: 250px;
     height: 250px;
     filter: none;
-    animation: pulse 1.8s infinite alternate ease-in-out; /* Увеличил время и добавил ease-in-out */
-    animation-fill-mode: both; /* Очень важно для равномерного старта */
+    animation: pulse 1.8s infinite alternate ease-in-out;
+    animation-fill-mode: both;
 }
 
 .splash-title {
@@ -852,15 +833,15 @@ body {
 @keyframes pulse {
     0% {
         transform: scale(1);
-        opacity: 1; /* Полностью виден */
+        opacity: 1;
     }
     50% {
-        transform: scale(1.02); /* Чуть-чуть увеличивается */
-        opacity: 0.7; /* Становится немного прозрачнее (мерцает) */
+        transform: scale(1.02);
+        opacity: 0.7;
     }
     100% {
         transform: scale(1);
-        opacity: 1; /* Возвращается к полной видимости */
+        opacity: 1;
     }
 }
 
@@ -948,8 +929,6 @@ body {
     filter: none;
 }
 
-/* --- Стили для страницы AI Чата (chatPage) --- */
-
 .chat-header {
     display: flex;
     justify-content: space-between;
@@ -978,7 +957,7 @@ body {
 .chat-options-icon {
     width: 24px;
     height: 24px;
-    filter: invert(1); /* Для белого цвета иконки на темном фоне */
+    filter: invert(1);
 }
 
 .chat-title-container {
@@ -1026,7 +1005,7 @@ body {
 }
 
 .chat-suggestion-box {
-    background-color: #333; /* Темный фон для предложений */
+    background-color: #333;
     color: var(--text-color);
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
@@ -1068,20 +1047,20 @@ body {
 }
 
 .message-user {
-    background-color: #007bff; /* Примерный цвет для сообщений пользователя */
+    background-color: #007bff;
     align-self: flex-end;
-    border-bottom-right-radius: 0.25rem; /* Сглаживаем угол со стороны пользователя */
+    border-bottom-right-radius: 0.25rem;
 }
 
 .message-ai {
-    background-color: #444; /* Примерный цвет для сообщений AI */
+    background-color: #444;
     align-self: flex-start;
-    border-bottom-left-radius: 0.25rem; /* Сглаживаем угол со стороны AI */
+    border-bottom-left-radius: 0.25rem;
 }
 
 .chat-input-area {
     position: fixed;
-    bottom: var(--bottom-nav-height); /* Поднимаем над нижней навигацией */
+    bottom: var(--bottom-nav-height);
     left: 0;
     width: 100%;
     padding: 1rem;
@@ -1092,7 +1071,7 @@ body {
     align-items: center;
     gap: 0.75rem;
     z-index: 100;
-    box-sizing: border-box; /* Учитываем padding в общей ширине */
+    box-sizing: border-box;
 }
 
 .deep-think-toggle-container {
@@ -1102,7 +1081,7 @@ body {
     color: var(--text-color);
     font-size: 0.85rem;
     width: 100%;
-    justify-content: flex-end; /* Выравнивание вправо */
+    justify-content: flex-end;
 }
 
 .deep-think-label {
@@ -1149,7 +1128,7 @@ body {
 }
 
 input:checked + .slider {
-    background-color: #007bff; /* Цвет при активном состоянии */
+    background-color: #007bff;
 }
 
 input:focus + .slider {
@@ -1195,9 +1174,9 @@ input:checked + .slider:before {
     color: var(--text-color);
     font-size: 1rem;
     outline: none;
-    resize: none; /* Отключаем изменение размера */
-    overflow: hidden; /* Скрываем полосу прокрутки */
-    max-height: 100px; /* Максимальная высота */
+    resize: none;
+    overflow: hidden;
+    max-height: 100px;
 }
 
 .message-input::placeholder {
@@ -1205,7 +1184,7 @@ input:checked + .slider:before {
 }
 
 .send-button {
-    background-color: #007bff; /* Синяя кнопка */
+    background-color: #000;
     border: none;
     border-radius: 50%;
     width: 48px;
@@ -1215,21 +1194,17 @@ input:checked + .slider:before {
     justify-content: center;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    flex-shrink: 0; /* Не сжимать кнопку */
-}
-
-.send-button:hover {
-    background-color: #0056b3;
+    flex-shrink: 0;
 }
 
 .send-icon {
     width: 24px;
     height: 24px;
-    filter: invert(1); /* Делаем иконку белой */
+    filter: none;
 }
 
 .chat-input-area.hidden {
-    display: none !important; /* Убедимся, что она скрывается */
+    display: none !important;
 }
 
 #analysisPage .header-text {
